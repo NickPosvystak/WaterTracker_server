@@ -102,7 +102,7 @@ module.exports = {
     "object-curly-newline": "warn",
     "one-var": ["error", "never"],
     "padding-line-between-statements": "error",
-    "prefer-const": "error",
+    // "prefer-const": "error",
     "prefer-object-spread": "warn",
     "quote-props": ["error", "as-needed"],
     radix: "error",
