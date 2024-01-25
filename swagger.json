@@ -104,9 +104,27 @@
         }
       }
     },
+    "/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "201": {
+            "description": "User successfully logout"
+          },
+          "401": {
+            "description": "Not authorized!",
+            "content": {}
+          }
+        }
+      }
+    },
     "/users/current": {
       "get": {
-        "tags": ["Auth"],
+        "tags": ["User"],
         "summary": "Get current user with all information",
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -129,19 +147,94 @@
         }
       }
     },
-    "/users/logout": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User logout",
+    "/users/updateAvatar": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Changing user's avatar",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {},
+        "requestBody": {
+          "description": "Update av",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "paramType": "body",
+                "properties": {
+                  "file": {
+                    "type": "file",
+                    "name": "file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "File format doesn't supported",
+            "content": {}
+          },
+          "409": {
+            "description": "Please add your avatar!",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/updateUser": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Changing user's data",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Data object to update",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": ""
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": "User successfully logout"
+            "description": "Update user's data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": ""
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
           },
           "401": {
-            "description": "Not authorized!",
+            "description": "User with email: example@gmail.com already exist",
+            "content": {}
+          },
+          "409": {
+            "description": "The entered password is incorrect!",
+            "content": {}
+          },
+          "500": {
+            "description": "Something is wrong with the website's server, try again later.",
             "content": {}
           }
         }
