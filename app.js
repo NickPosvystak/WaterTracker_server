@@ -6,6 +6,13 @@ require("dotenv").config();
 
 const app = express();
 
+// Check server-----------------
+const server = express();
+server.use((req, res) => {
+  res.send("Hello world!");
+});
+//------------------------------
+
 app.use(cors());
 app.use(express.json());
 
