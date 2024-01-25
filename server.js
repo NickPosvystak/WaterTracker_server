@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 const path = require("path");
-require("dotenv").config({path: path.join(__dirname, "./env/development.env")});
+require("dotenv").config({
+  path: path.join(__dirname, "./env/development.env"),
+});
 
-
-const PORT = process.env.PORT || 3000;
+const { MONGO_URL, PORT } = process.env;
 
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -12,12 +13,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log(`Database connection successful ✅`);
+    console.log(`==> Database connection successful ✅`);
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-    app.listen(PORT, () => {
+    app.listen(PORT || 3000, () => {
       console.log(`Server running. Use our API on port ==> ${PORT}`);
     });
   })
