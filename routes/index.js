@@ -1,3 +1,7 @@
 const authRouter = require("./authRouter");
+const waterRouter = require("./waterRouter");
 
-module.exports = {authRouter}
+module.exports = {
+  authRouter,
+  waterRouter,
+};
