@@ -5,7 +5,7 @@ const { handleMongooseError } = require("../helpers");
 const waterSchema = new Schema({
   amount: {
     type: Number,
-    max: 15000,
+    max: 5000,
     required: [true, "Amount is required"],
   },
   time: {
@@ -28,17 +28,28 @@ const waterSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  // _id: {
+  //   type: String,
+  //   required: true,
+  // },
 });
 
 //TODO: add JOI validation
 
 const waterJoiValidation = Joi.object({
-  amount: Joi.number().min(1).max(15000).required().message({
-    any: `Amount is wrong`,
+  amount: Joi.number().min(1).max(5000).required().messages({
+    "any.required": "Amount is required",
+    "number.base": "Amount must be a number",
+    "number.min": "Amount must be at least 1",
+    "number.max": "Amount must be at most 15000",
   }),
-  date: Joi.date().required().message({
-    any: `Time is wrong`,
+  time: Joi.date().required().messages({
+    "any.required": "Time is required",
+    "time.base": "Invalid time format",
   }),
+  // _id: Joi.string().required().messages({
+  //   // any: `ID is wrong`,
+  // }),
 });
 
 waterSchema.post("save", handleMongooseError);
