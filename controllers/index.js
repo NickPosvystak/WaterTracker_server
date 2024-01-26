@@ -1,3 +1,1 @@
-const authControllers = require("./authController")
-
-module.exports ={authControllers}
+export {default as authController} from "./authController.js"

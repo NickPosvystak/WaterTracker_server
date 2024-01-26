@@ -1,28 +1,16 @@
-// const express = require("express");
-const mongoose = require("mongoose");
-const app = require("./app");
-const path = require("path");
-require("dotenv").config({
-  path: path.join(__dirname, "./env/development.env"),
-});
+import mongoose from "mongoose";
 
+import app from "./app.js";
 
+const {MONGO_URL, PORT = 3000} = process.env;
 
-const { MONGO_URL, PORT } = process.env;
-
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+mongoose.connect(MONGO_URL)
   .then(() => {
-    console.log(`==> Database connection successful ✅`);
-
-    app.listen(PORT || 3000, () => {
-      console.log(`Server running. Use our API on port ==> ${PORT}`);
-    });
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    })
   })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error.message);
+  .catch(error => {
+    console.log(error.message);
     process.exit(1);
-  });
+  })

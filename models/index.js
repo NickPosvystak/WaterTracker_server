@@ -1,3 +1,4 @@
-const User = require("./userModel");
+import User from "./userModel";
 
-module.exports = { User };
+export { default as User }  from "./userModel";
+
