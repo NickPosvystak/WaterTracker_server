@@ -1,25 +1,32 @@
-import express from "express";
+const express = require("express");
 
-import {authController} from "../controllers/index.js";
+const ctrl = require("../controllers/authController");
 
-import {authenticate, isEmptyBody} from "../middlewares/index.js";
+const { validateBody, authentificate, upload } = require("../middlewares");
 
-import {validateBody} from "../decorators/index.js";
-
-import { userSignupSchema, userSigninSchema, userEmailSchema } from "../models/userModel.js";
+const { schemas } = require("../models/userModel");
 
 const authRouter = express.Router();
 
-authRouter.post("/register", isEmptyBody, validateBody(userSignupSchema), authController.signup);
+authRouter.post(
+  "/register",
+  validateBody(schemas.userRegisterSchema),
+  ctrl.register
+);
 
-authRouter.get("/verify/:verificationCode", authController.verify);
+authRouter.get("/users/verify/:verificationToken", ctrl.verifyEmail);
 
-authRouter.post("/verify", isEmptyBody, validateBody(userEmailSchema), authController.resendVerify);
+authRouter.post(
+  "/users/verify",
+  validateBody(schemas.emailSchema),
+  ctrl.resendVerifyEmail
+);
 
-authRouter.post("/login", isEmptyBody, validateBody(userSigninSchema), authController.signin);
+authRouter.post("/login", validateBody(schemas.userRegisterSchema), ctrl.login);
 
-authRouter.get("/current", authenticate, authController.getCurrent);
+authRouter.get("/current", authentificate, ctrl.getCurrent);
 
-authRouter.post("/logout", authenticate, authController.signout);
+authRouter.post("/logout", authentificate, ctrl.logout);
 
-export {authRouter};
+
+module.exports = authRouter;

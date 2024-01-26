@@ -1,2 +1,8 @@
-export {default as isEmptyBody} from "./isEmptyBody.js";
-export {default as authenticate} from "./authenticate.js";
+const validateBody = require("./validateBody");
+const authentificate = require("./authenticate");
+
+
+module.exports = {
+  validateBody,
+  authentificate,
+};

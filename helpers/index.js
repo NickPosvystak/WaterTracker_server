@@ -1,5 +1,12 @@
-export {default as catchAsync}  from "./catchAsync.js";
-export {default as handleMongooseError} from "./handleMongooseError.js";
 
-export {default as HttpError} from "./httpError.js";
-export {default as sendEmail} from "./sendEmail.js";
+const catchAsync = require("./catchAsync");
+const hendleMongooseError = require("./handleMongooseError");
+const ctrlWrapper =require("./ctrlWrapper")
+module.exports = {
+  catchAsync,
+  hendleMongooseError,
+  ctrlWrapper,
+  HttpError: require("./httpError"),
+  sendEmail: require("./sendEmail"),
+};
+
