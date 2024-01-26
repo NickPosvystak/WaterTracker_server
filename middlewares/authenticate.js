@@ -1,7 +1,10 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User.js");
-const { HttpError } = require("../helpers/index.js");
-const { ctrlWrapper } = require("../decorators/index.js");
+import jwt from "jsonwebtoken";
+
+import User from "../models/userModel.js";
+
+import { HttpError } from "../helpers/index.js";
+
+import { ctrlWrapper } from "../decorators/index.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -19,13 +22,14 @@ const authenticate = async (req, res, next) => {
         const { id } = jwt.verify(token, JWT_SECRET);
         const user = await User.findById(id);
         if (!user || !user.token || user.token !== token) {
-            throw HttpError(401, "User not found");
+            throw HttpError(401, "user not found");
         }
         req.user = user;
         next();
-    } catch (error) {
+    }
+    catch (error) {
         throw HttpError(401, error.message);
     }
-};
+}
 
-module.exports = ctrlWrapper(authenticate);
+export default ctrlWrapper(authenticate);

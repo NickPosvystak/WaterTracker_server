@@ -1,16 +1,25 @@
-const express = require("express");
-const authControllers = require("../controllers/authController"); 
+import express from "express";
 
-const { authenticate, isEmptyBody } = require("../middlewares/index.js");
-const { userSignupSchema, userSigninSchema, userEmailSchema } = require("../models/userModel.js");
+import {authController} from "../controllers/index.js";
+
+import {authenticate, isEmptyBody} from "../middlewares/index.js";
+
+import {validateBody} from "../decorators/index.js";
+
+import { userSignupSchema, userSigninSchema, userEmailSchema } from "../models/userModel.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/register", isEmptyBody, userSignupSchema, authControllers.register);
-authRouter.get("/verify/:verificationCode", authControllers.verify); 
-authRouter.post("/verify", isEmptyBody, userEmailSchema, authControllers.resendVerify);
-authRouter.post("/login", isEmptyBody, userSigninSchema, authControllers.login);
-authRouter.get("/current", authenticate, authControllers.getCurrent);
-authRouter.post("/logout", authenticate, authControllers.logout);
+authRouter.post("/register", isEmptyBody, validateBody(userSignupSchema), authController.signup);
 
-module.exports = authRouter;
+authRouter.get("/verify/:verificationCode", authController.verify);
+
+authRouter.post("/verify", isEmptyBody, validateBody(userEmailSchema), authController.resendVerify);
+
+authRouter.post("/login", isEmptyBody, validateBody(userSigninSchema), authController.signin);
+
+authRouter.get("/current", authenticate, authController.getCurrent);
+
+authRouter.post("/logout", authenticate, authController.signout);
+
+export {authRouter};

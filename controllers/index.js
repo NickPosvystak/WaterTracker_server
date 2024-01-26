@@ -1,7 +1,1 @@
-const authControllers = require("./authController");
-const waterController = require("./waterController");
-
-module.exports = {
-  authControllers,
-  waterController,
-};
+export {default as authController} from "./authController.js"
