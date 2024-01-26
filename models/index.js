@@ -1,6 +1,7 @@
+const User = require("./userModel");
+const Water = require("./waterModel");
 
-import User from "./userModel";
-
-export { default as User }  from "./userModel";
-
-
+module.exports = {
+  User,
+  Water,
+};

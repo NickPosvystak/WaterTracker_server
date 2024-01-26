@@ -1,3 +1,6 @@
+const authRouter = require("./authRouter")
 
-export {default as  authRouter } from "./authRouter";
+module.exports = {
+    authRouter
+}
 
