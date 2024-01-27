@@ -28,7 +28,7 @@
   ],
 
   "paths": {
-    "/users/register": {
+    "/user/register": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -66,7 +66,7 @@
         }
       }
     },
-    "/users/login": {
+    "/user/login": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
@@ -84,7 +84,7 @@
         },
         "responses": {
           "201": {
-            "description": "Register is successfully!",
+            "description": "Login is successfully!",
             "content": {
               "application/json": {
                 "schema": {
@@ -104,7 +104,7 @@
         }
       }
     },
-    "/users/logout": {
+    "/user/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
@@ -122,9 +122,9 @@
         }
       }
     },
-    "/users/current": {
+    "/user/current": {
       "get": {
-        "tags": ["User"],
+        "tags": ["Auth"],
         "summary": "Get current user with all information",
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -147,14 +147,14 @@
         }
       }
     },
-    "/users/updateAvatar": {
+    "/user/updateAvatar": {
       "patch": {
         "tags": ["User"],
         "summary": "Changing user's avatar",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Update av",
+          "description": "Update avatar",
           "required": true,
           "content": {
             "multipart/form-data": {
@@ -193,7 +193,7 @@
         }
       }
     },
-    "/users/updateUser": {
+    "/user/updateUser": {
       "patch": {
         "tags": ["User"],
         "summary": "Changing user's data",
@@ -272,12 +272,12 @@
             "userId": {
               "type": "number",
               "description": "User's id",
-              "example": "32143232436545474"
+              "example": "65b27b8f81e2cf397d6a87cc"
             }
           }
         },
         "example": [
-          { "email": "user@gmail.com", "userId": "1423424087213f00dh0" }
+          { "email": "user@gmail.com", "userId": "65b27b8f81e2cf397d6a87cc" }
         ]
       },
       "CurrentResponse": {
@@ -286,7 +286,7 @@
           "email": {
             "type": "string",
             "description": "User's email",
-            "example": ""
+            "example": "user@gmail.com"
           },
           "name": {
             "type": "string",
