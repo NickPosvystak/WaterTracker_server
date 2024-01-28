@@ -8,9 +8,10 @@ const { v4: uuidv4 } = require('uuid');
 
 const { User } = require("../models/userModel");
 
-const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
+const Email = require("../helpers/sendEmail");
 
-const { SECRETJWT_SECRET, BASE_URL } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -29,25 +30,23 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth//users/verify/${verificationToken}">Click verify email</a>`,
-  };
+  await newUser.save();
+  
+    // Send email notification
+  const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
+  await new Email(newUser, verifyLink).sendVerification();
 
-  await sendEmail(verifyEmail);
-
-  res.status(201).json({
+   res.status(201).json({
     user: {
       email: newUser.email,
-      subscription: newUser.subscription,
+      
     },
   });
 };
 
-const verifyEmail = async (req, res) => {
+const verifyEmail = async (req, res) => { 
   const { verificationToken } = req.params;
-  console.log(verificationToken);
+  
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
@@ -66,6 +65,7 @@ const verifyEmail = async (req, res) => {
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
+
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email not found");
@@ -74,13 +74,9 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpError(400, "Verification has already been passed");
   }
 
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/users/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  await sendEmail(verifyEmail);
+  // Resend email verification link
+  const resendLink = `${BASE_URL}/api/user/verify/${user.verificationToken}`;
+  await new Email(user, resendLink).sendVerification();
 
   res.status(200).json({
     message: "Verification email sent",
@@ -108,17 +104,17 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     token,
-    user: { email: user.email, subscription: user.subscription },
+    user: { email: user.email},
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
-  res.json({ email, subscription });
+  const { email } = req.user;
+  res.json({ email});
 };
 
 const logout = async (req, res) => {
