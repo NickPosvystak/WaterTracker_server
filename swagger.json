@@ -124,7 +124,7 @@
     },
     "/user/current": {
       "get": {
-        "tags": ["Auth"],
+        "tags": ["User"],
         "summary": "Get current user with all information",
         "parameters": [],
         "security": [{ "Bearer": [] }],
