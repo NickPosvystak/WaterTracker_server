@@ -29,5 +29,11 @@ authRouter.get("/current", authentificate, ctrl.getCurrent);
 
 authRouter.post("/logout", authentificate, ctrl.logout);
 
+authRouter.patch(
+  "/avatars",
+  authentificate,
+  upload.single("avatar"),
+  ctrl.updateAvatar
+);
 
 module.exports = authRouter;
