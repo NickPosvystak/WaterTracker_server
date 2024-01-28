@@ -14,10 +14,11 @@ authRouter.post(
   ctrl.register
 );
 
-authRouter.get("/users/verify/:verificationToken", ctrl.verifyEmail);
+authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
+authRouter.post("/verify", ctrl.resendVerifyEmail);
 
 authRouter.post(
-  "/users/verify",
+  "/user/verify",
   validateBody(schemas.emailSchema),
   ctrl.resendVerifyEmail
 );
