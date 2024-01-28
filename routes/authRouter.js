@@ -15,10 +15,10 @@ authRouter.post(
 );
 
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
-authRouter.post("/verify", ctrl.resendVerifyEmail);
+// authRouter.post("/verify", ctrl.resendVerifyEmail);
 
 authRouter.post(
-  "/user/verify",
+  "/verify",
   validateBody(schemas.emailSchema),
   ctrl.resendVerifyEmail
 );
