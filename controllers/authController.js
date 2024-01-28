@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
-const { v4: uuidv4 } = require('uuid');
-
+const { v4: uuidv4 } = require("uuid");
+const gravatar = require("gravatar");
 
 const { User } = require("../models/userModel");
 
@@ -12,6 +12,8 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
 const { JWT_SECRET, BASE_URL } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -22,49 +24,46 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email, { default: "wavatar" });
   const verificationToken = uuidv4();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     verificationToken,
+    avatarURL,
   });
-  
+
   await newUser.save();
-  
-  
-    // Send email notification
+
+  // Send email notification
   const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
   await new Email(newUser, verifyLink).sendVerification();
 
-   res.status(201).json({
+  res.status(201).json({
     user: {
       email: newUser.email,
-      
     },
   });
 };
 
-const verifyEmail = async (req, res) => { 
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
 
-    
-    const { verificationToken } = req.params;
-    
-    const user = await User.findOne({ verificationToken });
-  
-    if (!user) {
-      throw HttpError(404, "User not found");
-    }
-  
-    await User.findByIdAndUpdate(user._id, {
-      verify: true,
-      verificationToken: null,
-    });
-  
-    res.status(200).json({
-      message: "Verification successful",
-    });
+  const user = await User.findOne({ verificationToken });
 
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.status(200).json({
+    message: "Verification successful",
+  });
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -112,13 +111,13 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     token,
-    user: { email: user.email},
+    user: { email: user.email },
   });
 };
 
 const getCurrent = async (req, res) => {
   const { email } = req.user;
-  res.json({ email});
+  res.json({ email });
 };
 
 const logout = async (req, res) => {
@@ -129,6 +128,28 @@ const logout = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+
+  try {
+    const image = await Jimp.read(tempUpload);
+    await image.resize(250, 250).write(resultUpload);
+  } catch (error) {
+    console.error("Error processing avatar:", error);
+    throw HttpError(500, "Internal Server Error");
+  }
+
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -137,4 +158,5 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

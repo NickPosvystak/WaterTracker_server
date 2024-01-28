@@ -6,22 +6,22 @@ const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 const userSchema = new Schema(
   {
-    name:{
-        type: String,
-        required: [true, "Name is required"],
+    name: {
+      type: String,
+      required: [true, "Name is required"],
     },
     password: {
-        type: String,
-        minLength: 8,
-        required: [true, "Password is required"],
-      },
-      
+      type: String,
+      minLength: 8,
+      required: [true, "Password is required"],
+    },
+
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
     },
-      token: {
+    token: {
       type: String,
       default: null,
     },
@@ -33,17 +33,20 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Verify token is required"],
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 userSchema.post("save", hendleMongooseError);
 
-
 const userRegisterSchema = Joi.object({
-    name: Joi.string().required().messages({
-        "any.required": "Missing required name field",
-        "string.base": "name must be text",
-      }),
+  name: Joi.string().required().messages({
+    "any.required": "Missing required name field",
+    "string.base": "name must be text",
+  }),
   email: Joi.string().pattern(emailRegex).required().messages({
     "any.required": "Missing required email field",
     "string.base": "Email must be text",
