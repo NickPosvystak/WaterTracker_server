@@ -38,6 +38,7 @@ const register = async (req, res) => {
 
   // Send email notification
   const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
+  console.log('verifyLink: ========>>>', verifyLink);
   await new Email(newUser, verifyLink).sendVerification();
 
   res.status(201).json({
@@ -109,8 +110,8 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: jwtExpires });
   await User.findByIdAndUpdate(user._id, { token });
-  res.json({
-    token,
+  res.status(200).json({
+    token: token,
     user: { email: user.email },
   });
 };

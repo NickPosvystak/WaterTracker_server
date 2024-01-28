@@ -83,12 +83,12 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Login is successfully!",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/LogInResponse"
                 }
               }
             }
@@ -279,6 +279,37 @@
         "example": [
           { "email": "user@gmail.com", "userId": "65b27b8f81e2cf397d6a87cc" }
         ]
+      },
+      "LogInResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "User's avatar link",
+            "example": "http://res.cloudinary.com/..."
+          },
+          "token": {
+            "type": "string",
+            "description": "User token",
+            "example": "daf7f8a7fy8a7sfda7sydf"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Lilia"
+          }
+        },
+        "example": {
+          "email": "user@example.com",
+          "avatar": "http://res.cloudinary.com/...",
+          "token": "daf7f8a7fy8a7sfda7sydf",
+          "name": "Lilia"
+        }
       },
       "CurrentResponse": {
         "type": "object",
