@@ -5,6 +5,7 @@ const ctrl = require("../controllers/authController");
 const { validateBody, authentificate, upload } = require("../middlewares");
 
 const { schemas } = require("../models/userModel");
+const { updateEmailSchema } = require("../helpers");
 
 const authRouter = express.Router();
 
@@ -34,6 +35,13 @@ authRouter.patch(
   authentificate,
   upload.single("avatar"),
   ctrl.updateAvatar
+);
+
+authRouter.patch(
+  "/email",
+  authentificate,
+  validateBody(updateEmailSchema),
+  ctrl.updateEmail
 );
 
 module.exports = authRouter;

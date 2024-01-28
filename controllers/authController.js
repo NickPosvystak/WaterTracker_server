@@ -129,26 +129,49 @@ const logout = async (req, res) => {
   });
 };
 
+// const updateAvatar = async (req, res) => {
+//   const { _id } = req.user;
+//   const { path: tempUpload, originalname } = req.file;
+//   const filename = `${_id}_${originalname}`;
+//   const resultUpload = path.join(avatarsDir, filename);
+
+//   try {
+//     const image = await Jimp.read(tempUpload);
+//     await image.resize(250, 250).write(resultUpload);
+//   } catch (error) {
+//     console.error("Error processing avatar:", error);
+//     throw HttpError(500, "Internal Server Error");
+//   }
+
+//   await fs.rename(tempUpload, resultUpload);
+//   const avatarURL = path.join("avatars", filename);
+//   await User.findByIdAndUpdate(_id, { avatarURL });
+
+//   res.json({
+//     avatarURL,
+//   });
+// };
+
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
-
-  try {
-    const image = await Jimp.read(tempUpload);
-    await image.resize(250, 250).write(resultUpload);
-  } catch (error) {
-    console.error("Error processing avatar:", error);
-    throw HttpError(500, "Internal Server Error");
-  }
-
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename);
+  const avatarURL = req.file.path;
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
     avatarURL,
+  });
+};
+
+const updateEmail = async (req, res) => {
+  const { email } = req.body;
+  const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(_id, { email });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  res.status(200).json({
+    message: "Email updated successfully",
   });
 };
 
@@ -160,4 +183,5 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
+  updateEmail: ctrlWrapper(updateEmail),
 };
