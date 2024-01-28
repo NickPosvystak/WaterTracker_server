@@ -1,4 +1,4 @@
-const hendleMongooseError = (error, data, next) => {
+const handleMongooseError = (error, data, next) => {
   const { name, code } = error;
   console.log(name);
   console.log(code);
@@ -7,4 +7,4 @@ const hendleMongooseError = (error, data, next) => {
   next();
 };
 
-module.exports = hendleMongooseError;
+module.exports = handleMongooseError;
