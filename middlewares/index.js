@@ -1,5 +1,5 @@
 const validateBody = require("./validateBody");
-const authentificate = require("./authenticate");
+const authentificate = require("./authentificate");
 const isValidId = require("./isValidId");
 const upload = require("./upload");
 
