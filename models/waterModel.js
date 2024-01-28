@@ -2,37 +2,36 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
-const waterSchema = new Schema({
-  amount: {
-    type: Number,
-    max: 5000,
-    required: [true, "Amount is required"],
-  },
-  time: {
-    type: Date,
-    required: [true, "Time is required"],
-  },
-  day: {
-    type: Number,
-    default: null,
-  },
-  month: {
-    type: Number,
-    default: null,
-  },
-  year: {
-    type: Number,
-    default: null,
-  },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  // _id: {
-  //   type: String,
-  //   required: true,
-  // },
-});
+const waterSchema = new Schema(
+  {
+    amount: {
+      type: Number,
+      max: 5000,
+      required: [true, "Amount is required"],
+    },
+    time: {
+      type: Date,
+      required: [true, "Time is required"],
+    },
+    day: {
+      type: Number,
+      default: null,
+    },
+    month: {
+      type: Number,
+      default: null,
+    },
+    year: {
+      type: Number,
+      default: null,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    },
+  { versionKey: false, timestamps: true }
+);
 
 //TODO: add JOI validation
 
@@ -41,15 +40,13 @@ const waterJoiValidation = Joi.object({
     "any.required": "Amount is required",
     "number.base": "Amount must be a number",
     "number.min": "Amount must be at least 1",
-    "number.max": "Amount must be at most 15000",
+    "number.max": "Amount must be at most 5000",
   }),
   time: Joi.date().required().messages({
     "any.required": "Time is required",
     "time.base": "Invalid time format",
   }),
-  // _id: Joi.string().required().messages({
-  //   // any: `ID is wrong`,
-  // }),
+
 });
 
 waterSchema.post("save", handleMongooseError);

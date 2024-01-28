@@ -6,34 +6,27 @@ const { Water } = require("../models/waterModel");
 // WaterRate
 
 const setWaterRate = async (req, res) => {
-  try {
-// 
-    
-    // const {_id: owner } = req.user;
-    // console.log('req.user: ', req.user);
-    const { amount, time} = req.body;
-    console.log("req.body:====> ", req.body);
+  // take id form user
+  const { _id: owner } = req.user; 
+  //set amount and time 
+  const { amount, time } = req.body;
+// get date
+  const { day, month, year } = getDate(time);
+// create waterId
+  const result = await Water.create({
+    amount,
+    time,
+    day,
+    month,
+    year,
+    owner,
+  });
 
-    const { day, month, year } = getDate(time);
-
-    const result = await Water.create({
-      amount,
-      time,
-      day,
-      month,
-      year,
-      owner,
-    });
-    console.log("result: ======>", result);
-
-    res.status(201).json({
-      _id: result._id,
-      amount: result.amount,
-      time: result.time,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  res.status(201).json({
+    _id: result._id,
+    amount: result.amount,
+    time: result.time,
+  });
 };
 
 const deleteById = async (req, res) => {
