@@ -15,6 +15,6 @@ router.post(
 router.put("/:id",authentificate, isValidId, ctrl.updateById)
 router.delete("/:id", authentificate,  validateBody(schemas.waterJoiValidation), isValidId, ctrl.deleteById);
 
-router.get("/today",getWaterToday)
+router.get("/today",ctrl.getWaterToday)
 
 module.exports = router;
