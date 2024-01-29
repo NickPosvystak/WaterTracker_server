@@ -11,7 +11,7 @@ const { User } = require("../models/userModel");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
-const { JWT_SECRET, BASE_URL } = process.env;
+const { JWT_SECRET, BASE_URL,FRONTEND_URL } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -174,6 +174,29 @@ const updateEmail = async (req, res) => {
   });
 };
 
+const googleAuth = async (req, res) => {
+  const { _id: id, avatarURL, verificationToken } = req.user;
+
+  if (!avatarURL) {
+    return res.status(400).json({ message: "Отсутствует URL аватара." });
+  }
+
+  if (!verificationToken) {
+    return res.status(400).json({ message: "Отсутствует токен подтверждения." });
+  }
+
+  const payload = {
+    id,
+  };
+
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
+
+  await User.findByIdAndUpdate(id, { token, avatarURL, verificationToken,email });
+
+  res.redirect(`${FRONTEND_URL}?token=${token}`);
+};
+
+
 module.exports = {
   register: ctrlWrapper(register),
   verifyEmail: ctrlWrapper(verifyEmail),
@@ -183,4 +206,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   updateEmail: ctrlWrapper(updateEmail),
+  googleAuth: ctrlWrapper(googleAuth),
 };
