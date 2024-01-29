@@ -1,9 +1,10 @@
 const catchAsync = require("./catchAsync");
 const handleMongooseError = require("./handleMongooseError");
 const ctrlWrapper = require("./ctrlWrapper");
-const { updateEmailSchema } = require("./joiUpdateValid");
-const { updateNameSchema } = require("./joiUpdateValid");
-const { updatePasswordSchema } = require("./joiUpdateValid");
+// const { updateEmailSchema } = require("./joiUpdateValid");
+// const { updateNameSchema } = require("./joiUpdateValid");
+// const { updatePasswordSchema } = require("./joiUpdateValid");
+const { userUpdateSchema } = require("./joiUpdateValid");
 
 module.exports = {
   catchAsync,
@@ -11,7 +12,8 @@ module.exports = {
   ctrlWrapper,
   HttpError: require("./httpError"),
   sendEmail: require("./sendEmail"),
-  updateEmailSchema,
-  updateNameSchema,
-  updatePasswordSchema,
+  // updateEmailSchema,
+  // updateNameSchema,
+  // updatePasswordSchema,
+  userUpdateSchema,
 };

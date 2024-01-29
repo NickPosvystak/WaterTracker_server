@@ -10,11 +10,12 @@ const {
 } = require("../middlewares");
 
 const { schemas } = require("../models/userModel");
-const {
-  updateEmailSchema,
-  updateNameSchema,
-  updatePasswordSchema,
-} = require("../helpers");
+const { userUpdateSchema } = require("../helpers");
+// const {
+//   updateEmailSchema,
+//   updateNameSchema,
+//   updatePasswordSchema,
+// } = require("../helpers");
 
 const authRouter = express.Router();
 
@@ -57,25 +58,32 @@ authRouter.patch(
   ctrl.updateAvatar
 );
 
-authRouter.patch(
-  "/email",
-  authentificate,
-  validateBody(updateEmailSchema),
-  ctrl.updateEmail
-);
+// authRouter.patch(
+//   "/email",
+//   authentificate,
+//   validateBody(updateEmailSchema),
+//   ctrl.updateEmail
+// );
+
+// authRouter.patch(
+//   "/name",
+//   authentificate,
+//   validateBody(updateNameSchema),
+//   ctrl.updateName
+// );
+
+// authRouter.patch(
+//   "/password",
+//   authentificate,
+//   validateBody(updatePasswordSchema),
+//   ctrl.updatePassword
+// );
 
 authRouter.patch(
-  "/name",
+  "/update",
   authentificate,
-  validateBody(updateNameSchema),
-  ctrl.updateName
-);
-
-authRouter.patch(
-  "/password",
-  authentificate,
-  validateBody(updatePasswordSchema),
-  ctrl.updatePassword
+  validateBody(userUpdateSchema),
+  ctrl.updateUser
 );
 
 module.exports = authRouter;
