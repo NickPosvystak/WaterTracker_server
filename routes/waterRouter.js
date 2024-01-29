@@ -12,7 +12,7 @@ router.post(
   validateBody(schemas.waterJoiValidation),
   ctrl.setWaterRate
 );
-
-router.delete("/:id", authentificate, isValidId, ctrl.deleteById);
+router.put("/:id",authentificate, isValidId, ctrl.updateById)
+router.delete("/:id", authentificate,  validateBody(schemas.waterJoiValidation), isValidId, ctrl.deleteById);
 
 module.exports = router;
