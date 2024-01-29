@@ -278,6 +278,45 @@
           }
         }
       }
+    },
+    "/water/": {
+      "post": {
+        "tags": ["Water"],
+        "summary": "Add information about water rate",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Water rate data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterRateDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterRateDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized!",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -483,6 +522,50 @@
         },
         "example": {
           "dailyNorma": 2000
+        }
+      },
+      "WaterRateDataRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Water amount",
+            "example": 2000
+          },
+          "time": {
+            "type": "date",
+            "description": "Water intake time",
+            "example": "2024-01-29T10:12:33.000Z"
+          }
+        },
+        "example": {
+          "amount": 2000,
+          "time": "2024-01-29T10:12:33.000Z"
+        }
+      },
+      "WaterRateDataResponse": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Water amount",
+            "example": 2000
+          },
+          "time": {
+            "type": "date",
+            "description": "Water intake time",
+            "example": "2024-01-29T10:12:33.000Z"
+          },
+          "_id": {
+            "type": "object",
+            "description": "Id",
+            "example": "65b79c8fc516ea0f97c1828c"
+          }
+        },
+        "example": {
+          "_id": "65b79c8fc516ea0f97c1828c",
+          "amount": 2000,
+          "time": "2024-01-29T10:12:33.000Z"
         }
       }
     },
