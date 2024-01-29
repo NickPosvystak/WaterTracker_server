@@ -20,8 +20,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (passwordOne !== passwordTwo) {
-     throw HttpError(400, "Passwords do not match");
-    
+    throw HttpError(400, "Passwords do not match");
   }
   if (user) {
     throw HttpError(409, "Email already in use");
@@ -30,7 +29,7 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(passwordOne, 10);
   const avatarURL = gravatar.url(email, { default: "avatar" });
   const verificationToken = uuidv4();
-  
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
@@ -175,59 +174,97 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-const updateEmail = async (req, res) => {
-  const { email } = req.body;
+// const updateEmail = async (req, res) => {
+//   const { email } = req.body;
+//   const { _id } = req.user;
+//   const user = await User.findByIdAndUpdate(_id, { email });
+//   if (!user) {
+//     throw HttpError(404, "User not found");
+//   }
+
+//   res.status(200).json({
+//     message: "Email updated successfully",
+//     user: {
+//       email: user.email,
+//     },
+//   });
+// };
+
+// const updateName = async (req, res) => {
+//   const { name } = req.body;
+//   const { _id } = req.user;
+//   const user = await User.findByIdAndUpdate(_id, { name }, { new: true });
+
+//   if (!user) {
+//     throw HttpError(404, "User not found");
+//   }
+
+//   res.status(200).json({
+//     message: "Name updated successfully",
+//     user: {
+//       name: user.name,
+//     },
+//   });
+// };
+
+// const updatePassword = async (req, res) => {
+//   const { password } = req.body;
+//   const { _id } = req.user;
+//   const hashPassword = await bcrypt.hash(password, 10);
+//   const user = await User.findByIdAndUpdate(
+//     _id,
+//     { password: hashPassword },
+//     { new: true }
+//   );
+
+//   if (!user) {
+//     throw HttpError(404, "User not found");
+//   }
+
+//   res.status(200).json({
+//     message: "Password updated successfully",
+//     user: {
+//       password: password,
+//     },
+//   });
+// };
+
+const updateUser = async (req, res) => {
+  const { email, name, password, gender } = req.body;
   const { _id } = req.user;
-  const user = await User.findByIdAndUpdate(_id, { email });
-  if (!user) {
+
+  let updatedFields = { email, name };
+
+  let newPassword;
+  if (password) {
+    newPassword = password;
+    const hashPassword = await bcrypt.hash(password, 10);
+    updatedFields.password = hashPassword;
+  }
+
+  if (gender) {
+    updatedFields.gender = gender;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(_id, updatedFields, {
+    new: true,
+  });
+
+  if (!updatedUser) {
     throw HttpError(404, "User not found");
   }
 
-  res.status(200).json({
-    message: "Email updated successfully",
+  const response = {
+    message: "User updated successfully",
     user: {
-      email: user.email,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      password: newPassword,
+      gender: updatedUser.gender,
     },
-  });
-};
+  };
 
-const updateName = async (req, res) => {
-  const { name } = req.body;
-  const { _id } = req.user;
-  const user = await User.findByIdAndUpdate(_id, { name }, { new: true });
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  res.status(200).json({
-    message: "Name updated successfully",
-    user: {
-      name: user.name,
-    },
-  });
-};
-
-const updatePassword = async (req, res) => {
-  const { password } = req.body;
-  const { _id } = req.user;
-  const hashPassword = await bcrypt.hash(password, 10);
-  const user = await User.findByIdAndUpdate(
-    _id,
-    { password: hashPassword },
-    { new: true }
-  );
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  res.status(200).json({
-    message: "Password updated successfully",
-    user: {
-      password: password,
-    },
-  });
+  res.status(200).json(response);
 };
 
 const googleAuth = async (req, res) => {
@@ -267,8 +304,9 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
-  updateEmail: ctrlWrapper(updateEmail),
-  updateName: ctrlWrapper(updateName),
-  updatePassword: ctrlWrapper(updatePassword),
+  // updateEmail: ctrlWrapper(updateEmail),
+  // updateName: ctrlWrapper(updateName),
+  // updatePassword: ctrlWrapper(updatePassword),
+  updateUser: ctrlWrapper(updateUser),
   googleAuth: ctrlWrapper(googleAuth),
 };
