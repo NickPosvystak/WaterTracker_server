@@ -15,4 +15,6 @@ router.post(
 
 router.delete("/:id", authentificate, isValidId, ctrl.deleteById);
 
+router.get("/today",getWaterToday)
+
 module.exports = router;

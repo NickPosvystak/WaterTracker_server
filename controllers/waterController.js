@@ -39,6 +39,7 @@ const deleteById = async (req, res) => {
 };
 
 
+
 module.exports = {
   setWaterRate:ctrlWrapper(setWaterRate),
   deleteById:ctrlWrapper(deleteById)
