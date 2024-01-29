@@ -117,8 +117,16 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email } = req.user;
-  res.json({ email });
+    const { user } = req;
+
+    res.status(200).json({
+      name: user.name,
+      email: user.email,
+      token: user.token,
+      gender: user.gender,
+      dailyNorma: user.dailyNorma,
+      avatar: user.avatarURL,
+    });
 };
 
 const logout = async (req, res) => {
