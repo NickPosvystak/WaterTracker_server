@@ -16,17 +16,21 @@ const { JWT_SECRET, jwtExpires, BASE_URL, FRONTEND_URL } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, passwordOne, passwordTwo } = req.body;
   const user = await User.findOne({ email });
 
+  if (passwordOne !== passwordTwo) {
+     throw HttpError(400, "Passwords do not match");
+    
+  }
   if (user) {
     throw HttpError(409, "Email already in use");
   }
 
-  const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email, { default: "wavatar" });
+  const hashPassword = await bcrypt.hash(passwordOne, 10);
+  const avatarURL = gravatar.url(email, { default: "avatar" });
   const verificationToken = uuidv4();
-
+  
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
@@ -38,7 +42,7 @@ const register = async (req, res) => {
 
   // Send email notification
   const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
-  console.log('verifyLink: ========>>>', verifyLink);
+  console.log("verifyLink: ========>>>", verifyLink);
   await new Email(newUser, verifyLink).sendVerification();
 
   res.status(201).json({
@@ -117,22 +121,22 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-    const { user } = req;
+  const { user } = req;
 
-    res.status(200).json({
-      name: user.name,
-      email: user.email,
-      token: user.token,
-      gender: user.gender,
-      dailyNorma: user.dailyNorma,
-      avatar: user.avatarURL,
-    });
+  res.status(200).json({
+    name: user.name,
+    email: user.email,
+    token: user.token,
+    gender: user.gender,
+    dailyNorma: user.dailyNorma,
+    avatar: user.avatarURL,
+  });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  
+
   res.status(204).json({
     message: "No Content",
   });
@@ -181,6 +185,48 @@ const updateEmail = async (req, res) => {
 
   res.status(200).json({
     message: "Email updated successfully",
+    user: {
+      email: user.email,
+    },
+  });
+};
+
+const updateName = async (req, res) => {
+  const { name } = req.body;
+  const { _id } = req.user;
+  const user = await User.findByIdAndUpdate(_id, { name }, { new: true });
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  res.status(200).json({
+    message: "Name updated successfully",
+    user: {
+      name: user.name,
+    },
+  });
+};
+
+const updatePassword = async (req, res) => {
+  const { password } = req.body;
+  const { _id } = req.user;
+  const hashPassword = await bcrypt.hash(password, 10);
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { password: hashPassword },
+    { new: true }
+  );
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+
+  res.status(200).json({
+    message: "Password updated successfully",
+    user: {
+      password: password,
+    },
   });
 };
 
@@ -222,5 +268,7 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   updateEmail: ctrlWrapper(updateEmail),
+  updateName: ctrlWrapper(updateName),
+  updatePassword: ctrlWrapper(updatePassword),
   googleAuth: ctrlWrapper(googleAuth),
 };
