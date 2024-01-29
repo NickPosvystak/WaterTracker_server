@@ -1,5 +1,7 @@
 const { catchAsync, ctrlWrapper, HttpError } = require("../helpers");
 const getDate = require("../helpers/getDate");
+const getWaterInPercent = require("../helpers/getWaterInPercent");
+const totalToday = require("../helpers/totalToday");
 const { User } = require("../models/userModel");
 const { Water } = require("../models/waterModel");
 
@@ -63,7 +65,13 @@ const getWaterToday = async (req, res) => {
   );
 
   // get total for today
-  
+  const total = await totalToday(dailyList);
+  const percent = getWaterInPercent(total, dailyList);
+
+  res.status(201).json({
+    percent,
+    dailyList,
+  });
 };
 
 module.exports = {
