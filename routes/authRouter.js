@@ -2,16 +2,32 @@ const express = require("express");
 
 const ctrl = require("../controllers/authController");
 
-const { validateBody, authentificate, upload,passport } = require("../middlewares");
+const {
+  validateBody,
+  authentificate,
+  upload,
+  passport,
+} = require("../middlewares");
 
 const { schemas } = require("../models/userModel");
-const { updateEmailSchema } = require("../helpers");
+const {
+  updateEmailSchema,
+  updateNameSchema,
+  updatePasswordSchema,
+} = require("../helpers");
 
 const authRouter = express.Router();
 
-authRouter.get("/google", passport.authenticate("google", {scope: ["email", "profile"]}));
+authRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
 
-authRouter.get("/google/callback", passport.authenticate("google", {session: false}), ctrl.googleAuth);
+authRouter.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  ctrl.googleAuth
+);
 
 authRouter.post(
   "/register",
@@ -30,9 +46,9 @@ authRouter.post(
 
 authRouter.post("/login", validateBody(schemas.userRegisterSchema), ctrl.login);
 
-authRouter.get("/current", authentificate, ctrl.getCurrent);
-
 authRouter.post("/logout", authentificate, ctrl.logout);
+
+authRouter.get("/current", authentificate, ctrl.getCurrent);
 
 authRouter.patch(
   "/avatars",
@@ -46,6 +62,20 @@ authRouter.patch(
   authentificate,
   validateBody(updateEmailSchema),
   ctrl.updateEmail
+);
+
+authRouter.patch(
+  "/name",
+  authentificate,
+  validateBody(updateNameSchema),
+  ctrl.updateName
+);
+
+authRouter.patch(
+  "/password",
+  authentificate,
+  validateBody(updatePasswordSchema),
+  ctrl.updatePassword
 );
 
 module.exports = authRouter;
