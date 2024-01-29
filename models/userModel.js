@@ -3,14 +3,17 @@ const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 const { gender, emailRegex } = require("../constant/constant");
 
-
 const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
     },
-    password: {
+    passwordOne: {
+      type: String,
+      minLength: 8,
+      required: [true, "Password is required"],
+    },
+    passwordTwo: {
       type: String,
       minLength: 8,
       required: [true, "Password is required"],
@@ -52,20 +55,22 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const userRegisterSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": "Missing required name field",
-    "string.base": "name must be text",
+  name: Joi.string().messages({
+    "string.base": "Name must be text",
   }),
   email: Joi.string().pattern(emailRegex).required().messages({
     "any.required": "Missing required email field",
     "string.base": "Email must be text",
     "string.pattern.base": "Entered email is not valid",
   }),
-  password: Joi.string().min(6).required().messages({
+  passwordOne: Joi.string().min(8).required().messages({
     "any.required": "Missing required password field",
     "string.base": "Password must be text",
   }),
-  subscription: Joi.string().valid("starter", "pro", "business"),
+  passwordTwo: Joi.string().min(8).required().messages({
+    "any.required": "Missing required password field",
+    "string.base": "Password must be text",
+  }),
 });
 
 const emailSchema = Joi.object({
@@ -82,26 +87,15 @@ const userLoginSchema = Joi.object({
     "string.base": "Email must be text",
     "string.pattern.base": "Entered email is not valid",
   }),
-  password: Joi.string().min(6).required().messages({
+  password: Joi.string().min(8).required().messages({
     "any.required": "Missing required password field",
     "string.base": "Password must be text",
   }),
 });
 
-const userSubscriptionSchema = Joi.object({
-  subscription: Joi.string()
-    .required()
-    .valid("starter", "pro", "business")
-    .messages({
-      "any.required": "Missing required field subscription",
-      "string.base": "Unknown subscription type",
-    }),
-});
-
 const schemas = {
   userRegisterSchema,
   userLoginSchema,
-  userSubscriptionSchema,
   emailSchema,
 };
 
