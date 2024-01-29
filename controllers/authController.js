@@ -201,7 +201,7 @@ const googleAuth = async (req, res) => {
     id,
   };
 
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: jwtExpires });
 
   await User.findByIdAndUpdate(id, {
     token,
