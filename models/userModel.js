@@ -1,8 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
-const { emailRegex } = require("../constant/constant");
-
+const { gender, emailRegex } = require("../constant/constant");
 
 
 const userSchema = new Schema(
@@ -33,6 +32,15 @@ const userSchema = new Schema(
     verificationToken: {
       type: String,
       required: [true, "Verify token is required"],
+    },
+    gender: {
+      type: String,
+      enum: [...Object.values(gender)],
+      default: null,
+    },
+    dailyNorma: {
+      type: Number,
+      default: null,
     },
     avatarURL: {
       type: String,
