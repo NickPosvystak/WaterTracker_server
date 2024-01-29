@@ -14,7 +14,6 @@ const userSchema = new Schema(
       minLength: 8,
       required: [true, "Password is required"],
     },
-
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -59,6 +58,7 @@ const userRegisterSchema = Joi.object({
     "string.base": "Email must be text",
     "string.pattern.base": "Entered email is not valid",
   }),
+ 
   passwordOne: Joi.string().min(8).required().messages({
     "any.required": "Missing required password field",
     "string.base": "Password must be text",

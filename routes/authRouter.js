@@ -28,7 +28,7 @@ authRouter.post(
   ctrl.resendVerifyEmail
 );
 
-authRouter.post("/login", validateBody(schemas.userRegisterSchema), ctrl.login);
+authRouter.post("/login", validateBody(schemas.userLoginSchema), ctrl.login);
 
 authRouter.get("/current", authentificate, ctrl.getCurrent);
 
