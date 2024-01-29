@@ -1,4 +1,4 @@
-const { catchAsync, ctrlWrapper } = require("../helpers");
+const { catchAsync, ctrlWrapper,HttpError } = require("../helpers");
 const getDate  = require("../helpers/getDate");
 const { User } = require("../models/userModel");
 const { Water } = require("../models/waterModel");
@@ -39,9 +39,26 @@ const deleteById = async (req, res) => {
 };
 
 
+const updateById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await Water.findByIdAndUpdate(id, req.body, { new: true });
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error updating water by ID:", error);
+    res.status(500).json({ error: "Error updating water by ID" });
+  }
+};
+
+
+
 
 module.exports = {
   setWaterRate:ctrlWrapper(setWaterRate),
-  deleteById:ctrlWrapper(deleteById)
+  deleteById:ctrlWrapper(deleteById),
+  updateById:ctrlWrapper(updateById)
 };
 
