@@ -502,14 +502,14 @@
       "WaterRate": {
         "type": "object",
         "properties": {
-          "dailyNorma": {
+          "dailyNorm": {
             "type": "number",
             "description": "User daily normal water rate",
             "example": 2000
           }
         },
         "example": {
-          "dailyNorma": 2000
+          "dailyNorm": 2000
         }
       },
       "WaterRateDataRequest": {
