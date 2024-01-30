@@ -59,15 +59,10 @@ const userRegisterSchema = Joi.object({
     "string.pattern.base": "Entered email is not valid",
   }),
  
-  passwordOne: Joi.string().min(8).required().messages({
+  password: Joi.string().min(8).required().messages({
     "any.required": "Missing required password field",
     "string.base": "Password must be text",
   }),
-  passwordTwo: Joi.string().min(8).required().messages({
-    "any.required": "Missing required password field",
-    "string.base": "Password must be text",
-  }),
-
 });
 
 const emailSchema = Joi.object({

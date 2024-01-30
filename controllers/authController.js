@@ -17,17 +17,14 @@ const jwtExpires = "1d";
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
-  const { email, passwordOne, passwordTwo } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (passwordOne !== passwordTwo) {
-    throw HttpError(400, "Passwords do not match");
-  }
   if (user) {
     throw HttpError(409, "Email already in use");
   }
 
-  const hashPassword = await bcrypt.hash(passwordOne, 10);
+  const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email, { default: "avatar" });
   const verificationToken = uuidv4();
 
