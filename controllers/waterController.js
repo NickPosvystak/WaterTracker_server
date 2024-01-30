@@ -25,7 +25,7 @@ const setWaterRate = async (req, res) => {
   });
 
   res.status(201).json({
-    _id: result._id,
+    // _id: result._id,
     amount: result.amount,
     time: result.time,
   });
@@ -55,23 +55,32 @@ const updateById = async (req, res) => {
 };
 
 const getWaterToday = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { dailyNorm } = await User.findById(owner);
-
-  const { day, month, year } = getDate(Date.now());
-  const dailyList = await Water.find(
-    { day, month, year, owner },
-    "amount time"
-  );
-
-  // get total for today
-  const total = await totalToday(dailyList);
-  const percent = getWaterInPercent(total, dailyList);
-
-  res.status(201).json({
-    percent,
-    dailyList,
-  });
+  try {
+    
+    const { _id: owner } = req.user;
+    const { dailyNorm } = await User.findById(owner);
+    console.log('dailyNorm:=========> ', dailyNorm);
+  
+    const { day, month, year } = getDate(Date.now());
+    const dailyList = await Water.find(
+      { day, month, year, owner },
+      "amount time"
+    );
+      console.log('dailyList: ', dailyList);
+  
+    // get total for today
+    const total = await totalToday(dailyList);
+    console.log('total: =============>', total);
+    const percent = getWaterInPercent(total, dailyNorm);
+    console.log('percent: ============>', percent);
+  
+    res.status(201).json({
+      percent,
+      dailyList,
+    });
+  } catch (error) {
+    res.status(400).json({message:`Bad request`})
+  }
 };
 
 module.exports = {

@@ -36,7 +36,7 @@ const userSchema = new Schema(
       enum: [...Object.values(gender)],
       default: null,
     },
-    dailyNorma: {
+    dailyNorm: {
       type: Number,
       default: null,
     },
