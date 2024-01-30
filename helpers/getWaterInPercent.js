@@ -1,5 +1,4 @@
 const getWaterInPercent = (consumedWater, dailyWaterIntake) => {
-
   if (
     consumedWater === 0 ||
     dailyWaterIntake === 0 ||
@@ -7,7 +6,9 @@ const getWaterInPercent = (consumedWater, dailyWaterIntake) => {
   ) {
     return 0;
   }
-  return (consumedWater * 100) / dailyWaterIntake || null;
+  const percentage = (consumedWater * 100) / dailyWaterIntake || null;
+
+  return Math.round(percentage);
 };
 
 module.exports = getWaterInPercent;
