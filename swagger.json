@@ -366,15 +366,10 @@
             "description": "User's email",
             "format": "email"
           },
-          "avatar": {
-            "type": "string",
-            "description": "User's avatar link",
-            "example": "//www.gravatar.com/avatar/..."
-          },
           "token": {
             "type": "string",
             "description": "User token",
-            "example": "daf7f8a7fy8a7sfda7sydf"
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
           },
           "name": {
             "type": "string",
@@ -383,10 +378,8 @@
           }
         },
         "example": {
-          "name": "Lilia",
-          "email": "lilia@example.com",
-          "avatar": "//www.gravatar.com/avatar/...",
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c",
+          "email": "lilia@example.com"
         }
       },
       "CurrentResponse": {

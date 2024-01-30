@@ -11,22 +11,20 @@ const { User } = require("../models/userModel");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
-const { JWT_SECRET, jwtExpires, BASE_URL, FRONTEND_URL } = process.env;
+const { JWT_SECRET, BASE_URL, FRONTEND_URL } = process.env;
+const jwtExpires = "1d";
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
-  const { email, passwordOne, passwordTwo } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (passwordOne !== passwordTwo) {
-    throw HttpError(400, "Passwords do not match");
-  }
   if (user) {
     throw HttpError(409, "Email already in use");
   }
 
-  const hashPassword = await bcrypt.hash(passwordOne, 10);
+  const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email, { default: "avatar" });
   const verificationToken = uuidv4();
 
@@ -97,10 +95,10 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
-
-  if (!user.verify) {
-    throw HttpError(401, "Email not verified");
-  }
+  //TODO: removed specifically for testing
+  // if (!user.verify) {
+  //   throw HttpError(401, "Email not verified");
+  // }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
