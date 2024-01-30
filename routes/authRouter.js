@@ -58,6 +58,12 @@ authRouter.patch(
   ctrl.updateAvatar
 );
 
+authRouter.patch(
+  "/updateWaterRate", authentificate,
+  validateBody(schemas.updateWaterRate),
+  ctrl.updateWaterRate
+);
+
 // authRouter.patch(
 //   "/email",
 //   authentificate,
