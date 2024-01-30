@@ -265,6 +265,17 @@ const updateUser = async (req, res) => {
   res.status(200).json(response);
 };
 
+const updateWaterRate = async (req, res) => {
+    const { _id } = req.user;
+    console.log("res.user: =====>", res.user);
+
+    const newUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
+    console.log("newUser: =======>>", newUser);
+
+    res.status(200).json({ dailyNorm: newUser.dailyNorm });
+
+};
+
 const googleAuth = async (req, res) => {
   const { _id: id, avatarURL, verificationToken } = req.user;
 
@@ -306,5 +317,6 @@ module.exports = {
   // updateName: ctrlWrapper(updateName),
   // updatePassword: ctrlWrapper(updatePassword),
   updateUser: ctrlWrapper(updateUser),
+  updateWaterRate: ctrlWrapper(updateWaterRate),
   googleAuth: ctrlWrapper(googleAuth),
 };

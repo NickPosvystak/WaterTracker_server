@@ -3,7 +3,6 @@ const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 const { gender, emailRegex } = require("../constant/constant");
 
-
 const userSchema = new Schema(
   {
     name: {
@@ -36,7 +35,7 @@ const userSchema = new Schema(
       enum: [...Object.values(gender)],
       default: null,
     },
-    dailyNorma: {
+    dailyNorm: {
       type: Number,
       default: null,
     },
@@ -51,14 +50,14 @@ userSchema.post("save", handleMongooseError);
 
 const userRegisterSchema = Joi.object({
   name: Joi.string().messages({
-       "string.base": "Name must be text",
+    "string.base": "Name must be text",
   }),
   email: Joi.string().pattern(emailRegex).required().messages({
     "any.required": "Missing required email field",
     "string.base": "Email must be text",
     "string.pattern.base": "Entered email is not valid",
   }),
- 
+
   password: Joi.string().min(8).required().messages({
     "any.required": "Missing required password field",
     "string.base": "Password must be text",
@@ -85,12 +84,19 @@ const userLoginSchema = Joi.object({
   }),
 });
 
-
+const updateWaterRate = Joi.object({
+  dailyNorm: Joi.number().min(1).max(15000).required().messages({
+    "number.base": `DailyNorm should a number between 1 - 15000`,
+    "number.min": `DailyNorm can't be less than 1`,
+    "number.max": `DailyNorm can't be more than 15000`,
+  }),
+});
 
 const schemas = {
   userRegisterSchema,
   userLoginSchema,
-   emailSchema,
+  emailSchema,
+  updateWaterRate,
 };
 
 const User = model("user", userSchema);
