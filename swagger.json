@@ -543,15 +543,9 @@
             "type": "date",
             "description": "Water intake time",
             "example": "2024-01-29T10:12:33.000Z"
-          },
-          "_id": {
-            "type": "object",
-            "description": "Id",
-            "example": "65b79c8fc516ea0f97c1828c"
           }
         },
         "example": {
-          "_id": "65b79c8fc516ea0f97c1828c",
           "amount": 2000,
           "time": "2024-01-29T10:12:33.000Z"
         }
