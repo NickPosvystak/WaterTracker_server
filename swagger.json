@@ -346,16 +346,11 @@
               "type": "string",
               "description": "User's email",
               "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "65b27b8f81e2cf397d6a87cc"
-            }
+            }          
           }
         },
         "example": [
-          { "email": "lilia@gmail.com", "userId": "65b27b8f81e2cf397d6a87cc" }
+          { "email": "lilia@gmail.com" }
         ]
       },
       "LogInResponse": {
