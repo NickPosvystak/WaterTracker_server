@@ -11,7 +11,8 @@ const { User } = require("../models/userModel");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
-const { JWT_SECRET, jwtExpires, BASE_URL, FRONTEND_URL } = process.env;
+const { JWT_SECRET, BASE_URL, FRONTEND_URL } = process.env;
+const jwtExpires = "1d";
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
