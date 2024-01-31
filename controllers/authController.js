@@ -124,6 +124,9 @@ const login = async (req, res) => {
 
 const getCurrent = async (req, res) => {
   const { user } = req;
+  if (!user) {
+    throw new HttpError(401, "User not authenticated");
+  }
 
   res.status(200).json({
     name: user.name,
