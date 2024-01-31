@@ -131,7 +131,7 @@
         "requestBody": {},
         "responses": {
           "200": {
-            "description": "Get current user's data",
+            "description": "Get current user data",
             "content": {
               "application/json": {
                 "schema": {
@@ -150,7 +150,7 @@
     "/user/avatars": {
       "patch": {
         "tags": ["User"],
-        "summary": "Changing user's avatar",
+        "summary": "Changing user avatar",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -196,7 +196,7 @@
     "/user/updateUser": {
       "patch": {
         "tags": ["User"],
-        "summary": "Changing user's data",
+        "summary": "Changing user data",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -212,7 +212,7 @@
         },
         "responses": {
           "201": {
-            "description": "Update user's data",
+            "description": "Update user data",
             "content": {
               "application/json": {
                 "schema": {
@@ -482,12 +482,12 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
+            "description": "User email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
+            "description": "User password",
             "example": "qwerty123"
           }
         }
@@ -499,19 +499,19 @@
           "properties": {
             "email": {
               "type": "string",
-              "description": "User's email",
+              "description": "User email",
               "format": "email"
             }
           }
         },
-        "example": [{ "email": "lilia@gmail.com" }]
+        "example": [{ "email": "olga@gmail.com" }]
       },
       "LogInResponse": {
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
+            "description": "User email",
             "format": "email"
           },
           "token": {
@@ -526,6 +526,7 @@
           },
           "gender": {
             "type": "string",
+            "enum": ["male", "female"],
             "description": "User gender",
             "example": "female"
           },
@@ -554,8 +555,8 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
-            "example": "user@gmail.com"
+            "description": "User email",
+            "example": "bogdan@gmail.com"
           },
           "name": {
             "type": "string",
@@ -570,13 +571,13 @@
           },
           "avatar": {
             "type": "string",
-            "description": "User's avatar link",
+            "description": "User avatar link",
             "example": "http://res.cloudinary.com/.."
           },
-          "dailyNorma": {
+          "dailyNorm": {
             "type": "number",
             "description": "User water daily normal",
-            "example": 2
+            "example": 9000
           },
           "token": {
             "type": "string",
@@ -588,7 +589,7 @@
           "name": "Bogdan",
           "email": "bogdan@gmail.com",
           "gender": "male",
-          "dailyNorma": "2",
+          "dailyNorma": 9000,
           "avatar": "http://res.cloudinary.com/..",
           "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
         }
@@ -611,7 +612,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
+            "description": "User email",
             "format": "email"
           },
           "name": {
@@ -621,12 +622,12 @@
           },
           "passwordNew": {
             "type": "string",
-            "description": "User's password",
+            "description": "User password",
             "example": "balonca1"
           },
           "passwordOld": {
             "type": "string",
-            "description": "User's password",
+            "description": "User password",
             "example": "12345678"
           },
           "gender": {
@@ -637,8 +638,8 @@
           }
         },
         "example": {
-          "name": "Lilia",
-          "email": "lilia@gmail.com",
+          "name": "olga",
+          "email": "olga@gmail.com",
           "passwordOld": "12345678",
           "passwordNew": "balonca1",
           "gender": "female"
@@ -649,7 +650,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
+            "description": "User email",
             "format": "email"
           },
           "name": {
@@ -665,8 +666,8 @@
           }
         },
         "example": {
-          "name": "Lilia",
-          "email": "lilia@gmail.com",
+          "name": "olga",
+          "email": "olga@gmail.com",
           "gender": "female",
           "message": "Visit your new email to confirm it"
         }
