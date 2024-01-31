@@ -92,7 +92,7 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(404, "Email or password is wrong");
   }
   //TODO: removed specifically for testing
   // if (!user.verify) {

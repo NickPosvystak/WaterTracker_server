@@ -97,7 +97,7 @@
             "description": "Bad request (invalid request body)",
             "content": {}
           },
-          "401": {
+          "404": {
             "description": "Email or password is wrong",
             "content": {}
           }
@@ -522,12 +522,31 @@
           "name": {
             "type": "string",
             "description": "User name",
-            "example": "Lilia"
+            "example": "Olga"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User gender",
+            "example": "female"
+          },
+          "dailyNorm": {
+            "type": "number",
+            "description": "User daily rate",
+            "example": 9000
+          },
+          "avatar": {
+            "type": "string",
+            "description": "User avatar link",
+            "example": "www.gravatar.com/avatar/.."
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c",
-          "email": "lilia@example.com"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhjNjQ2N2I2ZWM3NzkzNTlmNTUxNyIsImlhdCI6MTcwNjc0MTQzMSwiZXhwIjoxNzA2ODI3ODMxfQ.Ta4WWNV8HpHOzykyyzrnIIOf3etM4-jKa0DLApSCLa8",
+          "name": "Olga",
+          "email": "olga@test.com",
+          "gender": "female",
+          "dailyNorm": 9000,
+          "avatar": "www.gravatar.com/avatar/.."
         }
       },
       "CurrentResponse": {
