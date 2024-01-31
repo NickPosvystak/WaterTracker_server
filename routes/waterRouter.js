@@ -22,5 +22,6 @@ router.delete(
 );
 
 router.get("/today", authentificate, ctrl.getWaterToday);
+router.get("/month", authentificate, ctrl.getWaterInfoByMonth);
 
 module.exports = router;
