@@ -39,7 +39,6 @@ const register = async (req, res) => {
 
   // Send email notification
   const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
-  console.log("verifyLink: ========>>>", verifyLink);
   await new Email(newUser, verifyLink).sendVerification();
 
   res.status(201).json({
