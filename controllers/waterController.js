@@ -92,10 +92,6 @@ const getWaterToday = async (req, res) => {
   }
 };
 
-
-
-
-
 const getWaterInfoByMonth = async (req, res) => {
   try {
     const { _id: owner } = req.user;
@@ -118,15 +114,17 @@ const getWaterInfoByMonth = async (req, res) => {
       "day month amount time"
     );
 
+    const uniqueDays = new Set(); 
     const waterInfoByDay = dailyList.map(({ day, month, amount, time }) => {
       const dateFormatted = `${day}, ${getMonthName(month)}`;
+      uniqueDays.add(dateFormatted); 
       const percentage = getWaterInPercent(amount, dailyNorm);
       return { date: dateFormatted, dailyNorm, percentage, time };
     });
 
     res.status(200).json({
       waterInfoByDay,
-      totalDays: dailyList.length,
+      totalDays: uniqueDays.size, 
     });
   } catch (error) {
     if (error instanceof HttpError) {
@@ -144,6 +142,7 @@ const getMonthName = (monthNumber) => {
   ];
   return months[monthNumber - 1];
 };
+
 
 
 module.exports = {
