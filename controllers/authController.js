@@ -125,7 +125,7 @@ const getCurrent = async (req, res) => {
     email: user.email,
     token: user.token,
     gender: user.gender,
-    dailyNorma: user.dailyNorma,
+    dailyNormm: user.dailyNorm,
     avatar: user.avatarURL,
   });
 };
@@ -266,14 +266,11 @@ const updateUser = async (req, res) => {
 };
 
 const updateWaterRate = async (req, res) => {
-    const { _id } = req.user;
-    console.log("res.user: =====>", res.user);
+  const { _id } = req.user;
 
-    const newUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
-    console.log("newUser: =======>>", newUser);
+  const newUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
 
-    res.status(200).json({ dailyNorm: newUser.dailyNorm });
-
+  res.status(200).json({ dailyNorm: newUser.dailyNorm });
 };
 
 const googleAuth = async (req, res) => {
