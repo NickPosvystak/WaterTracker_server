@@ -109,17 +109,16 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: jwtExpires });
+
   await User.findByIdAndUpdate(user._id, { token });
+
   res.status(200).json({
     token: token,
-    
-      name: user.name,
-      email: user.email,
-      token: user.token,
-      gender: user.gender,
-      dailyNorm: user.dailyNorm,
-      avatar: user.avatarURL,
-    
+    name: user.name,
+    email: user.email,
+    gender: user.gender,
+    dailyNorm: user.dailyNorm,
+    avatar: user.avatarURL,
   });
 };
 
