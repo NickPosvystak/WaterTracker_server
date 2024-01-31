@@ -10,7 +10,7 @@ router.post(
   "/",
   authentificate,
   validateBody(schemas.waterJoiValidation),
-  ctrl.setWaterRate
+  ctrl.setWaterData
 );
 router.put("/:id", authentificate, isValidId, ctrl.updateById);
 router.delete(

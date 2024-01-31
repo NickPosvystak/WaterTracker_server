@@ -534,6 +534,11 @@
       "WaterRateDataResponse": {
         "type": "object",
         "properties": {
+          "_id":{
+"type": "string",
+"description": "waterId",
+"example": "65ba16968f5cc7285725e5fa"
+          },
           "amount": {
             "type": "number",
             "description": "Water amount",
@@ -546,6 +551,7 @@
           }
         },
         "example": {
+          "_id": "65ba16968f5cc7285725e5fa",
           "amount": 2000,
           "time": "2024-01-29T10:12:33.000Z"
         }

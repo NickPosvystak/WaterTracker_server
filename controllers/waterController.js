@@ -7,7 +7,7 @@ const { Water } = require("../models/waterModel");
 
 // WaterRate
 
-const setWaterRate = async (req, res) => {
+const setWaterData = async (req, res) => {
   // take id form user
   const { _id: owner } = req.user;
   //set amount and time
@@ -25,7 +25,7 @@ const setWaterRate = async (req, res) => {
   });
 
   res.status(201).json({
-    // _id: result._id,
+    _id: result._id,
     amount: result.amount,
     time: result.time,
   });
@@ -47,44 +47,46 @@ const updateById = async (req, res) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json(result);
+    res.status(200).json({
+      _id: result._id,
+      amount: result.amount,
+      time: result.time,
+    });
   } catch (error) {
-    console.error("Error updating water by ID:", error);
     res.status(500).json({ error: "Error updating water by ID" });
   }
 };
 
 const getWaterToday = async (req, res) => {
   try {
-    
     const { _id: owner } = req.user;
     const { dailyNorm } = await User.findById(owner);
-    console.log('dailyNorm:=========> ', dailyNorm);
-  
+    console.log("dailyNorm:=========> ", dailyNorm);
+
     const { day, month, year } = getDate(Date.now());
     const dailyList = await Water.find(
       { day, month, year, owner },
       "amount time"
     );
-      console.log('dailyList: ', dailyList);
-  
+    console.log("dailyList: ", dailyList);
+
     // get total for today
     const total = await totalToday(dailyList);
-    console.log('total: =============>', total);
+    console.log("total: =============>", total);
     const percent = getWaterInPercent(total, dailyNorm);
-    console.log('percent: ============>', percent);
-  
+    console.log("percent: ============>", percent);
+
     res.status(201).json({
       percent,
       dailyList,
     });
   } catch (error) {
-    res.status(400).json({message:`Bad request`})
+    res.status(400).json({ message: `Bad request` });
   }
 };
 
 module.exports = {
-  setWaterRate: ctrlWrapper(setWaterRate),
+  setWaterData: ctrlWrapper(setWaterData),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
   getWaterToday: ctrlWrapper(getWaterToday),
