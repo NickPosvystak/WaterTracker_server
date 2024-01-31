@@ -34,10 +34,12 @@ const setWaterData = async (req, res) => {
 const deleteById = async (req, res) => {
   const { id } = req.params;
   const result = await Water.findByIdAndDelete(id);
+
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(400, "Missing or empty waterId parameter");
   }
-  res.status(200).json({ message: "Water deleted" });
+
+  res.status(200).json({ "Removed waterId": result.id });
 };
 
 const updateById = async (req, res) => {
@@ -60,28 +62,33 @@ const updateById = async (req, res) => {
 const getWaterToday = async (req, res) => {
   try {
     const { _id: owner } = req.user;
+    if (!owner) {
+      throw HttpError(401, "Unauthorized: User not found");
+    }
+
     const { dailyNorm } = await User.findById(owner);
-    console.log("dailyNorm:=========> ", dailyNorm);
+    if (!dailyNorm) {
+      throwHttpError(404, "User not found or missing dailyNorm");
+    }
 
     const { day, month, year } = getDate(Date.now());
     const dailyList = await Water.find(
       { day, month, year, owner },
       "amount time"
     );
-    console.log("dailyList: ", dailyList);
 
     // get total for today
     const total = await totalToday(dailyList);
-    console.log("total: =============>", total);
     const percent = getWaterInPercent(total, dailyNorm);
-    console.log("percent: ============>", percent);
 
-    res.status(201).json({
+    res.status(200).json({
       percent,
       dailyList,
     });
   } catch (error) {
-    res.status(400).json({ message: `Bad request` });
+    if (error instanceof HttpError) {
+      res.status(error.statusCode).json({ message: error.message });
+    }
   }
 };
 

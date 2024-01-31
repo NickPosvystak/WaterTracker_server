@@ -366,6 +366,112 @@
           }
         }
       }
+    },
+    "/water/{ waterId }": {
+      "delete": {
+        "tags": ["Water"],
+        "summary": "Delete all information about water rate",
+        "parameters": [
+          {
+            "name": "WaterId",
+            "in": "path",
+            "description": "ID of the water entry",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Delete water rate data",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteWaterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or empty waterId parameter",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized!",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/today": {
+      "get": {
+        "tags": ["Water"],
+        "summary": "Calculation as a percentage of the amount of water consumed and a list of all records of water consumption by the user for the current day",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Water per current day",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterTodayResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or missing dailyNorm",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized: User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/month": {
+      "get": {
+        "tags": ["Water"],
+        "summary": "NOT READY YET!!! ==> Receiving information on the amount of water consumed for the selected month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Water per current day",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterTodayResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or missing dailyNorm",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized: User not found",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -395,12 +501,10 @@
               "type": "string",
               "description": "User's email",
               "format": "email"
-            }          
+            }
           }
         },
-        "example": [
-          { "email": "lilia@gmail.com" }
-        ]
+        "example": [{ "email": "lilia@gmail.com" }]
       },
       "LogInResponse": {
         "type": "object",
@@ -583,10 +687,10 @@
       "WaterRateDataResponse": {
         "type": "object",
         "properties": {
-          "_id":{
-"type": "string",
-"description": "waterId",
-"example": "65ba16968f5cc7285725e5fa"
+          "_id": {
+            "type": "string",
+            "description": "waterId",
+            "example": "65ba16968f5cc7285725e5fa"
           },
           "amount": {
             "type": "number",
@@ -603,6 +707,50 @@
           "_id": "65ba16968f5cc7285725e5fa",
           "amount": 2000,
           "time": "2024-01-29T10:12:33.000Z"
+        }
+      },
+      "DeleteWaterResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "waterId",
+            "example": "65ba16968f5cc7285725e5fa"
+          }
+        },
+        "example": {
+          "Removed waterId": "65ba16968f5cc7285725e5fa"
+        }
+      },
+      "WaterTodayResponse": {
+        "type": "object",
+        "properties": {
+          "percent": {
+            "type": "number",
+            "description": "percent of all water consumed per current day",
+            "example": 60
+          },
+          "dailyNorm": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WaterRateDataResponse"
+            }
+          }
+        },
+        "example": {
+          "percent": 42,
+          "dailyList": [
+            {
+              "_id": "65ba053a12cb26f1af9b88bd",
+              "amount": 2250,
+              "time": "2024-01-31T12:55:00.000Z"
+            },
+            {
+              "_id": "65ba16968f5cc7285725e5fa",
+              "amount": 1550,
+              "time": "2024-01-31T12:59:00.000Z"
+            }
+          ]
         }
       }
     },

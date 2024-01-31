@@ -16,7 +16,7 @@ router.put("/:id", authentificate, isValidId, ctrl.updateById);
 router.delete(
   "/:id",
   authentificate,
-  validateBody(schemas.waterJoiValidation),
+  // validateBody(schemas.waterJoiValidation),
   isValidId,
   ctrl.deleteById
 );
