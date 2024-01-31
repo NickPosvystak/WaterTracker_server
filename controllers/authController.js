@@ -303,10 +303,8 @@ const registerSengrid = async (req, res) => {
 
 const updateWaterRate = async (req, res) => {
   const { _id } = req.user;
-  console.log("res.user: =====>", res.user);
 
   const newUser = await User.findByIdAndUpdate(_id, req.body, { new: true });
-  console.log("newUser: =======>>", newUser);
 
   res.status(200).json({ dailyNorm: newUser.dailyNorm });
 };
