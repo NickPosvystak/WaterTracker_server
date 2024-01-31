@@ -112,7 +112,14 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     token: token,
-    user: { email: user.email },
+    
+      name: user.name,
+      email: user.email,
+      token: user.token,
+      gender: user.gender,
+      dailyNorm: user.dailyNorm,
+      avatar: user.avatarURL,
+    
   });
 };
 
@@ -124,7 +131,7 @@ const getCurrent = async (req, res) => {
     email: user.email,
     token: user.token,
     gender: user.gender,
-    dailyNormm: user.dailyNorm,
+    dailyNorm: user.dailyNorm,
     avatar: user.avatarURL,
   });
 };
