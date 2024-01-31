@@ -317,6 +317,55 @@
           }
         }
       }
+    },
+    "/water/{waterId}": {
+      "put": {
+        "tags": ["Water"],
+        "summary": "Update information about water rate",
+        "parameters": [
+          {
+            "name": "WaterId",
+            "in": "path",
+            "description": "ID of the water entry",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Update water rate data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterRateDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterRateDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized!",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
