@@ -36,6 +36,12 @@ authRouter.post(
   ctrl.register
 );
 
+authRouter.post(
+  "/registerSeng",
+  validateBody(schemas.userRegisterSchema),
+  ctrl.registerSengrid
+);
+
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
 // authRouter.post("/verify", ctrl.resendVerifyEmail);
 
@@ -59,7 +65,8 @@ authRouter.patch(
 );
 
 authRouter.patch(
-  "/updateWaterRate", authentificate,
+  "/updateWaterRate",
+  authentificate,
   validateBody(schemas.updateWaterRate),
   ctrl.updateWaterRate
 );

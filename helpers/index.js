@@ -5,6 +5,7 @@ const ctrlWrapper = require("./ctrlWrapper");
 // const { updateNameSchema } = require("./joiUpdateValid");
 // const { updatePasswordSchema } = require("./joiUpdateValid");
 const { userUpdateSchema } = require("./joiUpdateValid");
+const sendEmailSengrid = require("./sendEmailSengrid");
 
 module.exports = {
   catchAsync,
@@ -16,4 +17,5 @@ module.exports = {
   // updateNameSchema,
   // updatePasswordSchema,
   userUpdateSchema,
+  sendEmailSengrid,
 };

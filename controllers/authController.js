@@ -8,7 +8,7 @@ const gravatar = require("gravatar");
 
 const { User } = require("../models/userModel");
 
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, sendEmailSengrid } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
 const { JWT_SECRET, BASE_URL, FRONTEND_URL } = process.env;
@@ -265,6 +265,42 @@ const updateUser = async (req, res) => {
   res.status(200).json(response);
 };
 
+const registerSengrid = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user) {
+    throw HttpError(409, "Email already in use");
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
+  const verificationToken = uuidv4();
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+    verificationToken,
+  });
+
+  await newUser.save();
+
+  const verifyLink = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/user/verify/${verificationToken}">Click verify email</a>`,
+  };
+
+  await sendEmailSengrid(verifyLink);
+
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+    },
+  });
+};
+
 const updateWaterRate = async (req, res) => {
   const { _id } = req.user;
 
@@ -304,6 +340,7 @@ const googleAuth = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
+  registerSengrid: ctrlWrapper(registerSengrid),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
