@@ -7,6 +7,7 @@ const {
   authentificate,
   upload,
   passport,
+  checkUpdateMyPassword,
 } = require("../middlewares");
 
 const { schemas } = require("../models/userModel");
@@ -97,6 +98,13 @@ authRouter.patch(
   authentificate,
   validateBody(userUpdateSchema),
   ctrl.updateUser
+);
+
+authRouter.patch(
+  "/update-my-password",
+  authentificate,
+  checkUpdateMyPassword,
+  ctrl.updateMyPassword
 );
 
 module.exports = authRouter;

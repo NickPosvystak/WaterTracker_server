@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 const { gender, emailRegex } = require("../constant/constant");
+const bcrypt = require("bcrypt");
 
 const userSchema = new Schema(
   {
@@ -91,6 +92,10 @@ const updateWaterRate = Joi.object({
     "number.max": `DailyNorm can't be more than 15000`,
   }),
 });
+
+userSchema.methods.checkPassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 const schemas = {
   userRegisterSchema,
