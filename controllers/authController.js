@@ -28,18 +28,22 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email, { default: "wavatar" });
   const verificationToken = uuidv4();
 
-  const newUser = await User.create({
+const newUser = await User.findOneAndUpdate(
+  { email },
+  {
     ...req.body,
     password: hashPassword,
     verificationToken,
     avatarURL,
-  });
+  },
+  { new: true, upsert: true }
+);
 
-  await newUser.save();
+  // await newUser.save();
 
   // Send email notification
-  const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
-  await new Email(newUser, verifyLink).sendVerification();
+  // const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
+  // await new Email(newUser, verifyLink).sendVerification();
 
   res.status(201).json({
     user: {
