@@ -3,6 +3,7 @@ const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 const { gender, emailRegex } = require("../constant/constant");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const userSchema = new Schema(
   {
@@ -29,7 +30,7 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, "Verify token is required"],
+      // required: [true, "Verify token is required"],
     },
     gender: {
       type: String,
@@ -43,6 +44,12 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
       required: true,
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetTokenExp: {
+      type: Date,
     },
   },
   { versionKey: false, timestamps: true }
@@ -95,6 +102,18 @@ const updateWaterRate = Joi.object({
 
 userSchema.methods.checkPassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetTokenExp = Date.now() + 10 * 60 * 1000; // Установите срок действия токена здесь
+
+  return resetToken;
 };
 
 const schemas = {
