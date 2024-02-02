@@ -8,7 +8,12 @@ const gravatar = require("gravatar");
 
 const { User } = require("../models/userModel");
 
-const { HttpError, ctrlWrapper, sendEmailSengrid } = require("../helpers");
+const {
+  HttpError,
+  ctrlWrapper,
+  sendEmailSengrid,
+  hashPassword,
+} = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
 const { JWT_SECRET, BASE_URL, FRONTEND_URL } = process.env;
@@ -277,6 +282,16 @@ const updateUser = async (req, res) => {
   res.status(200).json(response);
 };
 
+const updateMyPassword = async (req, res) => {
+  const { newPassword } = req.body;
+
+  const hashedPassword = await hashPassword(newPassword);
+  req.user.password = hashedPassword;
+  await req.user.save();
+
+  res.status(200).json({ message: "Password updated successfully" });
+};
+
 const registerSengrid = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -359,6 +374,7 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
+  updateMyPassword: ctrlWrapper(updateMyPassword),
   // updateEmail: ctrlWrapper(updateEmail),
   // updateName: ctrlWrapper(updateName),
   // updatePassword: ctrlWrapper(updatePassword),
