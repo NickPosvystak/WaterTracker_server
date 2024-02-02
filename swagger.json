@@ -112,7 +112,7 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {},
         "responses": {
-          "201": {
+          "204": {
             "description": "User successfully logout"
           },
           "401": {
@@ -324,7 +324,7 @@
         "summary": "Update information about water rate",
         "parameters": [
           {
-            "name": "WaterId",
+            "name": "waterId",
             "in": "path",
             "description": "ID of the water entry",
             "required": true,
@@ -336,7 +336,7 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Update water rate data",
-          "required": true,
+          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -373,7 +373,7 @@
         "summary": "Delete all information about water rate",
         "parameters": [
           {
-            "name": "WaterId",
+            "name": "waterId",
             "in": "path",
             "description": "ID of the water entry",
             "required": true,
@@ -384,7 +384,7 @@
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Delete water rate data",
+          "description": "Don't need",
           "required": false
         },
         "responses": {
@@ -448,7 +448,7 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Water per current day",
+          "description": "Water per current month",
           "required": false
         },
         "responses": {
@@ -457,7 +457,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WaterTodayResponse"
+                  "$ref": "#/components/schemas/WaterMonthResponse"
                 }
               }
             }
@@ -764,6 +764,63 @@
               "time": "2024-01-31T12:59:00.000Z"
             }
           ]
+        }
+      },
+      "WaterMonthResponse": {
+        "type": "object",
+        "properties": {
+          "waterInfoByDay": {
+            "type": "array",
+            "properties": [
+              {
+                "dayInfo": {
+                  "date": {
+                    "type": "string",
+                    "format": "12, january",
+                    "description": " Day of consumed water",
+                    "example": "12, january"
+                  },
+                  "dailyNorm": {
+                    "type": "number",
+                    "description": "User daily rate",
+                    "example": 9000
+                  },
+                  "percentage": {
+                    "type": "number",
+                    "description": "Percent of all water consumed per current day",
+                    "example": 60
+                  },
+                  "time": {
+                    "type": "date",
+                    "description": "Water intake time",
+                    "example": "2024-01-29T10:12:33.000Z"
+                  }
+                }
+              }
+            ]  
+          },
+          "totalDays": {
+            "type": "number",
+            "description": "Number of days when the water was consumed",
+            "example": 2
+          }     
+        },
+        "example": {
+          "waterInfoByDay": [
+            {
+              "date": "29, January",
+              "dailyNorm": 9000,
+              "percentage": 60,
+              "time": "2024-01-29T10:12:33.000Z"
+            },
+            {
+              "date": "30, January",
+              "dailyNorm": 1500,
+              "percentage": 147,
+              "time": "2024-01-29T11:12:33.000Z"
+            }
+          ],
+          "totalDays": 2
         }
       }
     },
