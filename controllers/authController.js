@@ -33,19 +33,18 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email, { default: "wavatar" });
   const verificationToken = uuidv4();
 
-const newUser = await User.findOneAndUpdate(
-  { email },
-  {
-    ...req.body,
-    password: hashPassword,
-    verificationToken,
-    avatarURL,
-  },
-  { new: true, upsert: true }
-);
+  const newUser = await User.findOneAndUpdate(
+    { email },
+    {
+      ...req.body,
+      password: hashPassword,
+      verificationToken,
+      avatarURL,
+    },
+    { new: true, upsert: true }
+  );
 
-  // await newUser.save();
-
+  //TODO WARN поки відміна через довге завантаження
   // Send email notification
   // const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
   // await new Email(newUser, verifyLink).sendVerification();
