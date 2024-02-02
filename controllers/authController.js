@@ -5,6 +5,8 @@ const fs = require("fs/promises");
 const Jimp = require("jimp");
 const { v4: uuidv4 } = require("uuid");
 const gravatar = require("gravatar");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 const { User } = require("../models/userModel");
 
@@ -291,6 +293,90 @@ const updateMyPassword = async (req, res) => {
   res.status(200).json({ message: "Password updated successfully" });
 };
 
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw HttpError(400, "Email is required");
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(200)
+        .json({ msg: "Password reset instruction sent by email" });
+    }
+
+    const verificationToken = uuidv4();
+    user.verificationToken = verificationToken;
+    await user.save();
+
+    console.log(verificationToken);
+
+    const tempPasswordResetToken = crypto.randomBytes(32).toString("hex");
+    user.passwordResetToken = tempPasswordResetToken;
+    user.passwordResetTokenExp = Date.now() + 3600000;
+    await user.save();
+
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/reset-password/${verificationToken}`;
+
+    const emailData = {
+      to: user.email,
+      subject: "Password Reset Instruction",
+      html: `<p>Please click the following link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
+    };
+
+    await sendEmailSengrid(emailData);
+
+    res.status(200).json({
+      msg: "Password reset instruction sent by email",
+    });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    throw HttpError(500, "Internal Server Error");
+  }
+};
+
+const restorePassword = async (req, res) => {
+  try {
+    const { verificationToken } = req.params;
+    const { password } = req.body;
+
+    console.log("Received verification token:", verificationToken); // Добавляем для отладки
+
+    const user = await User.findOne({ verificationToken });
+
+    console.log("Found user:", user); // Добавляем для отладки
+
+    if (!user || !user.passwordResetToken) {
+      throw HttpError(400, "Token is not valid");
+    }
+
+    if (Date.now() > user.passwordResetTokenExp) {
+      throw HttpError(400, "Token has expired");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+    user.verificationToken = null;
+    user.passwordResetToken = null;
+    user.passwordResetTokenExp = null;
+
+    await user.save();
+
+    res.status(200).json({
+      msg: "Success",
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
 const registerSengrid = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -380,4 +466,6 @@ module.exports = {
   updateUser: ctrlWrapper(updateUser),
   updateWaterRate: ctrlWrapper(updateWaterRate),
   googleAuth: ctrlWrapper(googleAuth),
+  forgotPassword: ctrlWrapper(forgotPassword),
+  restorePassword: ctrlWrapper(restorePassword),
 };

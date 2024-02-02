@@ -10,4 +10,6 @@ const checkUserPasswords = async (id, currentPassword, newPassword) => {
   await currUser.save();
 };
 
-module.exports = checkUserPasswords;
+const getUserByEmail = (email) => User.findOne({ email });
+
+module.exports = { checkUserPasswords, getUserByEmail };

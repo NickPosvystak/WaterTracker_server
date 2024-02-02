@@ -107,4 +107,8 @@ authRouter.patch(
   ctrl.updateMyPassword
 );
 
+authRouter.post("/forgot-password", ctrl.forgotPassword);
+
+authRouter.post("/restore-password/:verificationToken", ctrl.restorePassword);
+
 module.exports = authRouter;

@@ -1,4 +1,3 @@
-
 // const nodemailer = require("nodemailer");
 
 // const { UKR_NET_PASSWORD, UKR_NET_EMAIL } = process.env;
@@ -80,6 +79,10 @@ class Email {
 
   async sendVerification() {
     await this._send("verification", "Verification mail");
+  }
+
+  async sendPasswdReset() {
+    await this._send("restorePassword", "Password reset instructions");
   }
 }
 
