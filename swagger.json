@@ -625,11 +625,6 @@
             "description": "User password",
             "example": "balonca1"
           },
-          "passwordOld": {
-            "type": "string",
-            "description": "User password",
-            "example": "12345678"
-          },
           "gender": {
             "type": "string",
             "enum": ["male", "female"],
@@ -638,10 +633,9 @@
           }
         },
         "example": {
-          "name": "olga",
+          "name": "Olga",
           "email": "olga@gmail.com",
-          "passwordOld": "12345678",
-          "passwordNew": "balonca1",
+          "newPassword": "balonca1",
           "gender": "female"
         }
       },
@@ -666,10 +660,9 @@
           }
         },
         "example": {
-          "name": "olga",
+          "name": "Olga",
           "email": "olga@gmail.com",
-          "gender": "female",
-          "message": "Visit your new email to confirm it"
+          "gender": "female"
         }
       },
       "WaterRate": {

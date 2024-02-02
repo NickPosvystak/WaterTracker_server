@@ -94,7 +94,7 @@ authRouter.patch(
 // );
 
 authRouter.patch(
-  "/update",
+  "/updateUser",
   authentificate,
   validateBody(userUpdateSchema),
   ctrl.updateUser
