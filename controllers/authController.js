@@ -273,7 +273,7 @@ const updateUser = async (req, res) => {
     user: {
       email: updatedUser.email,
       name: updatedUser.name,
-      password: newPassword,
+      // password: newPassword,
       gender: updatedUser.gender,
     },
   };
