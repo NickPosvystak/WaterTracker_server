@@ -367,7 +367,7 @@
         }
       }
     },
-    "/water/{ waterId }": {
+    "/water/{waterId} ": {
       "delete": {
         "tags": ["Water"],
         "summary": "Delete all information about water rate",
