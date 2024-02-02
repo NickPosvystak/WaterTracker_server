@@ -240,7 +240,7 @@
         }
       }
     },
-    "/users/updateWaterRate": {
+    "/user/updateWaterRate": {
       "patch": {
         "tags": ["User"],
         "summary": "Changing daily water rate",
