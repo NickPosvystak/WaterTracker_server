@@ -449,7 +449,14 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Water per current month",
-          "required": false
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MonthRequest"
+              }
+            }
+          }
         },
         "responses": {
           "200": {
@@ -766,6 +773,22 @@
           ]
         }
       },
+      "MonthRequest": {
+        "type": "object",
+        "required": ["month", "year"],
+        "properties": {
+          "month": {
+            "type": "number",
+            "description": "month",
+            "example": 2
+          },
+          "year": {
+            "type": "number",
+            "description": "year",
+            "example": "2024"
+          }
+        }
+      },
       "WaterMonthResponse": {
         "type": "object",
         "properties": {
@@ -774,6 +797,11 @@
             "properties": [
               {
                 "dayInfo": {
+                  "id": {
+                    "type": "number",
+                    "description": "DateID",
+                    "example": "2"
+                  },
                   "date": {
                     "type": "string",
                     "format": "12, january",
@@ -790,34 +818,36 @@
                     "description": "Percent of all water consumed per current day",
                     "example": 60
                   },
-                  "time": {
-                    "type": "date",
-                    "description": "Water intake time",
-                    "example": "2024-01-29T10:12:33.000Z"
+                  "consumers": {
+                    "type": "number",
+                    "description": "The number of times water is drunk",
+                    "example": 3
                   }
                 }
               }
-            ]  
+            ]
           },
           "totalDays": {
             "type": "number",
             "description": "Number of days when the water was consumed",
-            "example": 2
-          }     
+            "example": 29
+          }
         },
         "example": {
           "waterInfoByDay": [
             {
+              "id": 3,
               "date": "29, January",
               "dailyNorm": 9000,
               "percentage": 60,
-              "time": "2024-01-29T10:12:33.000Z"
+              "consumers": 2
             },
             {
+              "id": 4,
               "date": "30, January",
               "dailyNorm": 1500,
               "percentage": 147,
-              "time": "2024-01-29T11:12:33.000Z"
+              "consumers": 4
             }
           ],
           "totalDays": 2
