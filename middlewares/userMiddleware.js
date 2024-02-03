@@ -24,7 +24,7 @@ const updateUserPassword = async (req, res, next) => {
     const user = await User.findById(_id);
 
     // Check current password only if newPassword is provided
-    if (newPassword) {
+    if (newPassword || email || name || gender) {
       const isMatch = await user.checkPassword(currentPassword, user.password);
       if (!isMatch) {
         return res
