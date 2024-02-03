@@ -7,12 +7,6 @@ const updateUserPassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword, email, name, gender } = req.body;
     const { _id } = req.user;
-    const user = await User.findById(_id);
-
-    const isMatch = await user.checkPassword(currentPassword, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Current password is incorrect" });
-    }
 
     const validationResult = userUpdateSchema.validate({
       email,
@@ -20,22 +14,48 @@ const updateUserPassword = async (req, res, next) => {
       password: newPassword,
       gender,
     });
+
     if (validationResult.error) {
       return res
         .status(400)
         .json({ message: validationResult.error.details[0].message });
     }
 
+    const user = await User.findById(_id);
+
+    // Check current password only if newPassword is provided
+    if (newPassword) {
+      const isMatch = await user.checkPassword(currentPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect" });
+      }
+    }
+
+    // Create an empty object to store the fields that need to be updated
+    const updateFields = {};
+
+    // Check if the fields are provided and update the object accordingly
+    if (email) {
+      updateFields.email = email;
+    }
+    if (name) {
+      updateFields.name = name;
+    }
+    if (gender) {
+      updateFields.gender = gender;
+    }
+
     let hashedPassword;
     if (newPassword) {
       hashedPassword = await hashPassword(newPassword);
+      updateFields.password = hashedPassword;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      { email, name, password: hashedPassword, gender },
-      { new: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(_id, updateFields, {
+      new: true,
+    });
 
     const response = {
       message: "User updated successfully",
@@ -43,7 +63,7 @@ const updateUserPassword = async (req, res, next) => {
         email: updatedUser.email,
         name: updatedUser.name,
         gender: updatedUser.gender,
-        password: newPassword ? newPassword : "Password was not updated",
+        // password: newPassword ? newPassword : "Password was not updated",
       },
     };
 

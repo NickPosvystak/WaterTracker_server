@@ -24,11 +24,11 @@ const userUpdateSchema = Joi.object({
     "any.only": "Gender must be either 'male' or 'female'",
   }),
 })
-  .or("email", "name", "password", "gender")
-  .messages({
-    "object.missing":
-      "At least one of 'email', 'name', 'password', or 'gender' must be provided",
-  });
+  // .or("email", "name", "password", "gender")
+  // .messages({
+  //   "object.missing":
+  //     "At least one of 'email', 'name', 'password', or 'gender' must be provided",
+  // });
 
 module.exports = {
   userUpdateSchema,
