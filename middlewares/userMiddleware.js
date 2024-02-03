@@ -7,6 +7,7 @@ const updateUserPassword = async (req, res, next) => {
   try {
     const { currentPassword, newPassword, email, name, gender } = req.body;
     const { _id } = req.user;
+    
 
     const validationResult = userUpdateSchema.validate({
       email,
@@ -63,6 +64,8 @@ const updateUserPassword = async (req, res, next) => {
         email: updatedUser.email,
         name: updatedUser.name,
         gender: updatedUser.gender,
+        dailyNorm: user.dailyNorm,
+        avatar: user.avatarURL,
         // password: newPassword ? newPassword : "Password was not updated",
       },
     };
