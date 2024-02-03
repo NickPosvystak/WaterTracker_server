@@ -9,7 +9,7 @@ const userUpdateSchema = Joi.object({
   name: Joi.string()
     .min(2)
     .max(32)
-    .pattern(new RegExp("^[a-zA-Zа-яА-ЯёЁ]+(?:-[a-zA-Zа-яА-ЯёЁ]+)*$"))
+    .pattern(/^[a-zA-Zа-яА-ЯёЁ\s]+(?:-[a-zA-Zа-яА-ЯёЁ\s]+)*$/).optional()
     .messages({
       "string.base": "Name must be a string",
       "string.min": "Name must have at least {{#limit}} characters",

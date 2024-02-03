@@ -617,6 +617,17 @@
       "UpdateRequest": {
         "type": "object",
         "properties": {
+          "currentPassword": {
+            "type": "string",
+            "description": "User currentPassword",
+            "required": true,
+            "example": "balonca1"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "User newPassword",
+            "example": "balonca23"
+          },
           "email": {
             "type": "string",
             "description": "User email",
@@ -626,16 +637,6 @@
             "type": "string",
             "description": "User name",
             "example": "User"
-          },
-          "currentPassword": {
-            "type": "string",
-            "description": "User currentPassword",
-            "example": "balonca1"
-          },
-          "newPassword": {
-            "type": "string",
-            "description": "User newPassword",
-            "example": "balonca23"
           },
           "gender": {
             "type": "string",
