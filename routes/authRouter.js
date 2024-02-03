@@ -93,15 +93,15 @@ authRouter.patch(
 //   ctrl.updatePassword
 // );
 
-authRouter.patch(
-  "/updateUser",
-  authentificate,
-  validateBody(userUpdateSchema),
-  ctrl.updateUser
-);
+// authRouter.patch(
+//   "/updateUser",
+//   authentificate,
+//   validateBody(userUpdateSchema),
+//   ctrl.updateUser
+// );
 
 authRouter.patch(
-  "/update-my-password",
+  "/updateUser",
   authentificate,
   checkUpdateMyPassword,
   ctrl.updateMyPassword

@@ -211,7 +211,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Update user data",
             "content": {
               "application/json": {
@@ -234,7 +234,7 @@
             "content": {}
           },
           "500": {
-            "description": "Something is wrong with the website's server, try again later.",
+            "description": "Failed to update user",
             "content": {}
           }
         }
@@ -624,13 +624,18 @@
           },
           "name": {
             "type": "string",
-            "description": "User avatar name",
+            "description": "User name",
             "example": "User"
           },
-          "passwordNew": {
+          "currentPassword": {
             "type": "string",
-            "description": "User password",
+            "description": "User currentPassword",
             "example": "balonca1"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "User newPassword",
+            "example": "balonca23"
           },
           "gender": {
             "type": "string",
@@ -642,8 +647,9 @@
         "example": {
           "name": "Olga",
           "email": "olga@gmail.com",
-          "newPassword": "balonca1",
-          "gender": "female"
+          "gender": "female",
+          "currentPassword": "balonca1",
+          "newPassword": "balonca23"
         }
       },
       "UpdateResponse": {

@@ -16,14 +16,18 @@ const userUpdateSchema = Joi.object({
       "string.max": "Name must have at most {{#limit}} characters",
       "string.pattern.base": "Entered name is not valid",
     }),
-  password: Joi.string().min(8).max(64).messages({
+  newPassword: Joi.string().min(8).max(64).messages({
     "string.base": "Password must be a string",
-    "string.min": "Password must be at least 6 characters long",
+    "string.min": "Password must be at least 8 characters long",
   }),
   gender: Joi.string().valid("male", "female").messages({
     "any.only": "Gender must be either 'male' or 'female'",
   }),
-})
+  currentPassword: Joi.when("newPassword", {
+    is: Joi.exist(),
+    then: Joi.string().min(8),
+  }),
+});
   // .or("email", "name", "password", "gender")
   // .messages({
   //   "object.missing":

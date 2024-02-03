@@ -11,7 +11,7 @@ const updateUserPassword = async (req, res, next) => {
     const validationResult = userUpdateSchema.validate({
       email,
       name,
-      password: newPassword,
+      newPassword: newPassword,
       gender,
     });
 
