@@ -445,17 +445,24 @@
       "get": {
         "tags": ["Water"],
         "summary": "Receiving information on the amount of water consumed for the selected month",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Year and month",
+            "example": "2024-2"
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Water per current month",
-          "required": true,
+          "required": false,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MonthRequest"
-              }
-            }
+            "application/json": {}
           }
         },
         "responses": {
@@ -780,85 +787,66 @@
           ]
         }
       },
-      "MonthRequest": {
-        "type": "object",
-        "required": ["month", "year"],
-        "properties": {
-          "month": {
-            "type": "number",
-            "description": "month",
-            "example": 2
-          },
-          "year": {
-            "type": "number",
-            "description": "year",
-            "example": "2024"
-          }
-        }
-      },
       "WaterMonthResponse": {
-        "type": "object",
+        "type": "array",
         "properties": {
-          "waterInfoByDay": {
-            "type": "array",
-            "properties": [
-              {
-                "dayInfo": {
-                  "id": {
-                    "type": "number",
-                    "description": "DateID",
-                    "example": "2"
-                  },
-                  "date": {
-                    "type": "string",
-                    "format": "12, january",
-                    "description": " Day of consumed water",
-                    "example": "12, january"
-                  },
-                  "dailyNorm": {
-                    "type": "number",
-                    "description": "User daily rate",
-                    "example": 9000
-                  },
-                  "percentage": {
-                    "type": "number",
-                    "description": "Percent of all water consumed per current day",
-                    "example": 60
-                  },
-                  "consumers": {
-                    "type": "number",
-                    "description": "The number of times water is drunk",
-                    "example": 3
-                  }
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "number",
+                  "format": 12,
+                  "description": " Day of month",
+                  "example": 12
+                },
+                "month": {
+                  "type": "number",
+                  "format": 2,
+                  "description": " Month of year",
+                  "example": 2
                 }
               }
-            ]
-          },
-          "totalDays": {
-            "type": "number",
-            "description": "Number of days when the water was consumed",
-            "example": 29
+            },
+            "dailyNorm": {
+              "type": "number",
+              "description": "User daily rate",
+              "example": 9000
+            },
+            "percent": {
+              "type": "number",
+              "description": "percent of all water consumed per current day",
+              "example": 55
+            },
+            "quantity": {
+              "type": "number",
+              "description": "Numbers of all water consumed per current day",
+              "example": 3
+            }
           }
         },
-        "example": {
-          "waterInfoByDay": [
-            {
-              "id": 3,
-              "date": "29, January",
-              "dailyNorm": 9000,
-              "percentage": 60,
-              "consumers": 2
+
+        "example": [
+          {
+            "date": {
+              "day": 1,
+              "month": 2
             },
-            {
-              "id": 4,
-              "date": "30, January",
-              "dailyNorm": 1500,
-              "percentage": 147,
-              "consumers": 4
-            }
-          ],
-          "totalDays": 2
-        }
+            "dailyNorm": 3000,
+            "percent": 28,
+            "quantity": 4
+          },
+          {
+            "date": {
+              "day": 2,
+              "month": 2
+            },
+            "dailyNorm": 3000,
+            "percent": 55,
+            "quantity": 2
+          }
+        ]
       }
     },
     "securitySchemes": {
