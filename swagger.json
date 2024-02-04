@@ -122,6 +122,86 @@
         }
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sending an email to a user with a new password",
+        "parameters": [],
+        "requestBody": {
+          "description": "User email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPasswordResponse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset instruction sent by email",
+            "content": {}
+          },
+          "400": {
+            "description": "Email is required",
+            "content": {}
+          },
+          "404": {
+            "description": "Email not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/restore-password/{verificationToken}": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Restoring user password with verification token",
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "in": "path",
+            "description": "Verification token received via email",
+            "required": true
+            
+          }
+        ],
+        "requestBody": {
+          "description": "User new password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/restorePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          },
+          "400": {
+            "description": "Token has expired",
+            "content": {}
+          },
+          "404": {
+            "description": "Email not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/user/current": {
       "get": {
         "tags": ["User"],
@@ -562,6 +642,30 @@
           "gender": "female",
           "dailyNorm": 9000,
           "avatar": "www.gravatar.com/avatar/.."
+        }
+      },
+      "NewPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email"
+          }
+        },
+        "example": {
+          "email": "olga@test.com"
+        }
+      },
+      "restorePassword": {
+        "type": "object",
+        "required": ["password"],
+        "properties": {
+                   "password": {
+            "type": "string",
+            "description": "User new password",
+            "example": "qwerty123"
+          }
         }
       },
       "CurrentResponse": {
