@@ -1,9 +1,11 @@
 const { catchAsync, ctrlWrapper, HttpError } = require("../helpers");
 const getDate = require("../helpers/getDate");
+const monthInfoWaterList = require("../helpers/getWaterListInfo");
 const getWaterInPercent = require("../helpers/getWaterInPercent");
 const totalToday = require("../helpers/totalToday");
 const { User } = require("../models/userModel");
 const { Water } = require("../models/waterModel");
+const numDays = require("../helpers/getAllDaysOfMonth");
 
 // WaterRate
 
@@ -68,7 +70,7 @@ const getWaterToday = async (req, res) => {
 
     const { dailyNorm } = await User.findById(owner);
     if (!dailyNorm) {
-      throwHttpError(404, "User not found or missing dailyNorm");
+      throw HttpError(404, "User not found or missing dailyNorm");
     }
 
     const { day, month, year } = getDate(Date.now());
@@ -95,76 +97,124 @@ const getWaterToday = async (req, res) => {
 
 //getWaterInfoByMonth
 
-const  getDaysInMonth=(year, month) =>{
-  return new Date(year, month + 1, 0).getDate();
-}
+// const  getDaysInMonth=(year, month) =>{
+//   return new Date(year, month + 1, 0).getDate();
+// }
 
-const getWaterInfoByMonth = async (req, res) => {
+// const getWaterInfoByMonth = async (req, res) => {
+//   try {
+//       const { _id: owner } = req.user;
+//       if (!owner) {
+//         throw HttpError(401, "Unauthorized: User not found");
+//       }
+
+//       const { month, year } = req.body;
+
+//       const firstDayOfMonth = new Date(`${year}-${month}-01`);
+//       const lastDayOfMonth = new Date(new Date(firstDayOfMonth).setMonth(firstDayOfMonth.getMonth() + 1) - 1);
+
+//       const { dailyNorm } = await User.findById(owner);
+//       if (!dailyNorm) {
+//         throw HttpError(404, "User not found or missing dailyNorm");
+//       }
+
+//       const dailyList = await Water.find(
+//           { day: { $gte: firstDayOfMonth.getDate(), $lte: lastDayOfMonth.getDate() }, month, year, owner },
+//           "day month amount time"
+//       );
+
+//       const totalDaysInMonth = getDaysInMonth(year, month);
+//       const waterInfoByDay = [];
+
+//       for (let day = 1; day <= totalDaysInMonth; day++) {
+//           const dateFormatted = `${day}, ${getMonthName(month)}`;
+//           const existingData = dailyList.find(item => item.day === day);
+
+//           if (existingData) {
+//               const countConsumers = dailyList.filter(item => item.day === day).length;
+//               const percentage = getWaterInPercent(existingData.amount, dailyNorm);
+//               waterInfoByDay.push({ id: day, date: dateFormatted, waterNorma: dailyNorm, percentage, consumers: countConsumers });
+//           } else {
+//               waterInfoByDay.push({ id: day, date: dateFormatted, waterNorma: " ", percentage: " ", consumers: 0 });
+//           }
+//       }
+
+//       res.status(200).json({
+//           waterInfoByDay,
+//           totalDays: totalDaysInMonth,
+//       });
+//   } catch (error) {
+//       if (error instanceof HttpError) {
+//           res.status(error.statusCode).json({ message: error.message });
+//       } else {
+//           res.status(500).json({ message: "Server error" });
+//       }
+//   }
+// };
+
+// const getMonthName = (monthNumber) => {
+//   const months = [    
+// "January", "February", "March", "April", "May", "June", "July",
+// "August", "September", "October", "November", "December"
+//   ];
+//   return months[monthNumber - 1];
+// };
+
+
+const getWaterPerMonth = async (req, res) => {
   try {
-      const { _id: owner } = req.user;
-      if (!owner) {
-        throw HttpError(401, "Unauthorized: User not found");
-      }
+    const { date } = req.query;
+    const { _id: owner } = req.user;
+    const { dailyNorm } = await User.findById(owner);
 
-      const { month, year } = req.body;
+    if (!dailyNorm) {
+      throw HttpError(404, "User not found or missing dailyNorma");
+    }
 
-      const firstDayOfMonth = new Date(`${year}-${month}-01`);
-      const lastDayOfMonth = new Date(new Date(firstDayOfMonth).setMonth(firstDayOfMonth.getMonth() + 1) - 1);
+    const list = await getMonthList(date, dailyNorm, owner);
 
-      const { dailyNorm } = await User.findById(owner);
-      if (!dailyNorm) {
-        throwHttpError(404, "User not found or missing dailyNorm");
-      }
-
-      const dailyList = await Water.find(
-          { day: { $gte: firstDayOfMonth.getDate(), $lte: lastDayOfMonth.getDate() }, month, year, owner },
-          "day month amount time"
-      );
-
-      const totalDaysInMonth = getDaysInMonth(year, month);
-      const waterInfoByDay = [];
-
-      for (let day = 1; day <= totalDaysInMonth; day++) {
-          const dateFormatted = `${day}, ${getMonthName(month)}`;
-          const existingData = dailyList.find(item => item.day === day);
-
-          if (existingData) {
-              const countConsumers = dailyList.filter(item => item.day === day).length;
-              const percentage = getWaterInPercent(existingData.amount, dailyNorm);
-              waterInfoByDay.push({ id: day, date: dateFormatted, waterNorma: dailyNorm, percentage, consumers: countConsumers });
-          } else {
-              waterInfoByDay.push({ id: day, date: dateFormatted, waterNorma: " ", percentage: " ", consumers: 0 });
-          }
-      }
-
-      res.status(200).json({
-          waterInfoByDay,
-          totalDays: totalDaysInMonth,
-      });
+    res.status(200).json(list);
   } catch (error) {
-      if (error instanceof HttpError) {
-          res.status(error.statusCode).json({ message: error.message });
-      } else {
-          res.status(500).json({ message: "Server error" });
-      }
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
-const getMonthName = (monthNumber) => {
-  const months = [    
-"January", "February", "March", "April", "May", "June", "July",
-"August", "September", "October", "November", "December"
-  ];
-  return months[monthNumber - 1];
+const getMonthList = async (date, norma, owner) => {
+  const list = [];
+
+  const { month, year } = getDate(date);
+  const currentYear = new Date().getFullYear();
+
+  if (!month || !year || !(currentYear - 3 < year && year < currentYear + 3)) {
+    throw HttpError(404, `Date is not correct`);
+  }
+
+  const listResult = await monthInfoWaterList(owner, month, norma);
+  const daysInMonth = numDays(year, month);
+
+  for (let index = 1; index <= daysInMonth; index++) {
+    const currentDay = listResult.filter((el) => el.day === index);
+    const percent = getWaterInPercent(currentDay[0]?.total, norma);
+
+    list.push({
+      date: { day: index, month },
+      dailyNorm: norma,
+      percent: percent,
+      quantity: currentDay[0]?.count || null,
+    });
+  }
+
+  return list;
 };
 
 
 
 
 module.exports = {
-  getWaterInfoByMonth:ctrlWrapper(getWaterInfoByMonth),
+  // getWaterInfoByMonth: ctrlWrapper(getWaterInfoByMonth),
   setWaterData: ctrlWrapper(setWaterData),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
   getWaterToday: ctrlWrapper(getWaterToday),
+  getWaterPerMonth: ctrlWrapper(getWaterPerMonth),
 };
