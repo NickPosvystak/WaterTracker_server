@@ -6,7 +6,7 @@ require("dotenv").config({
 
 const app = require("./app");
 
-const { MONGO_URL, PORT = 3000 } = process.env;
+const { MONGO_URL, PORT} = process.env;
 
 mongoose
   .connect(MONGO_URL)
@@ -20,5 +20,6 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
 
 
