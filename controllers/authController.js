@@ -145,6 +145,8 @@ const getCurrent = async (req, res) => {
     gender: user.gender,
     dailyNorm: user.dailyNorm,
     avatar: user.avatarURL,
+    created: user.createdAt,
+    updated: user.updatedAt,
   });
 };
 
