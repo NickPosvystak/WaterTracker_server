@@ -444,7 +444,7 @@
     "/water/month": {
       "get": {
         "tags": ["Water"],
-        "summary": "NOT READY YET!!! ==> Receiving information on the amount of water consumed for the selected month",
+        "summary": "Receiving information on the amount of water consumed for the selected month",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
