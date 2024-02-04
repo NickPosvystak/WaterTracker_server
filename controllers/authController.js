@@ -421,34 +421,18 @@ const updateWaterRate = async (req, res) => {
   res.status(200).json({ dailyNorm: newUser.dailyNorm });
 };
 
-const googleAuth = async (req, res) => {
-  const { _id: id, avatarURL, verificationToken } = req.user;
-
-  if (!avatarURL) {
-    return res.status(400).json({ message: "Отсутствует URL аватара." });
-  }
-
-  if (!verificationToken) {
-    return res
-      .status(400)
-      .json({ message: "Отсутствует токен подтверждения." });
-  }
+const googleAuth = async(req, res)=> {
+  const {_id: id} = req.user;
 
   const payload = {
-    id,
-  };
-
+      id,
+  }
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: jwtExpires });
+  await User.findByIdAndUpdate(id, {token});
 
-  await User.findByIdAndUpdate(id, {
-    token,
-    avatarURL,
-    verificationToken,
-    email,
-  });
+  res.redirect(`${FRONTEND_URL}?Token=${token}`)
+}
 
-  res.redirect(`${FRONTEND_URL}?token=${token}`);
-};
 
 module.exports = {
   register: ctrlWrapper(register),
