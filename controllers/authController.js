@@ -327,16 +327,26 @@ const forgotPassword = async (req, res) => {
 
     const resetUrl = `${req.protocol}://${req.get(
       "host"
-    )}/api/v1/reset-password/${verificationToken}`;
+    )}/api/user/reset-password/${verificationToken}`;
 
-    const emailData = {
-      to: user.email,
-      subject: "Password Reset Instruction",
-      html: `<p>Please click the following link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
-    };
+    // const emailData = {
+    //   to: user.email,
+    //   subject: "Password Reset Instruction",
+    //   html: `<p>Please click the following link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
+    // };
+
+    // await sendEmailSengrid(emailData);
+
+    
+ const emailData = {
+   to: user.email,
+   subject: "Password Reset Instruction",
+   template: "verification",
+   url: `${resetUrl}`,
+ };
 
     await sendEmailSengrid(emailData);
-
+    
     res.status(200).json({
       msg: "Password reset instruction sent by email",
     });
