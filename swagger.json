@@ -28,6 +28,34 @@
   ],
 
   "paths": {
+    "/auth/google": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User registration from Google",
+        "parameters": [],
+        "description": "This route use for google authorization and don't need any params or body.",
+
+        "responses": {
+          "": {
+            "description": "When the user is certified, the Google Api redirects him to the route: /google-redirect"
+          }
+        }
+      }
+    },
+    "/auth/google-redirect": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User registration from Google Api redirect route",
+        "parameters": [],
+        "description": "If the user has received confirmation, Google sends a `code` to the parameters. We use this parameter to get information about the user from Google and store the user in our API",
+
+        "responses": {
+          "": {
+            "description": "The saved user receives a token and redirects to frontend"
+          }
+        }
+      }
+    },
     "/user/register": {
       "post": {
         "tags": ["Auth"],
@@ -168,7 +196,6 @@
             "in": "path",
             "description": "Verification token received via email",
             "required": true
-            
           }
         ],
         "requestBody": {
