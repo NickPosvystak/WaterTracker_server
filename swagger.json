@@ -152,7 +152,7 @@
     },
     "/user/forgot-password": {
       "post": {
-        "tags": ["User"],
+        "tags": ["Auth"],
         "summary": "Sending an email to a user with a new password",
         "parameters": [],
         "requestBody": {
