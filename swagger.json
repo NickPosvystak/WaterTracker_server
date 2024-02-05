@@ -770,24 +770,36 @@
           "email": {
             "type": "string",
             "description": "User email",
-            "format": "email"
+            "example": "olga@gmail.com"
           },
           "name": {
             "type": "string",
             "description": "User avatar name",
-            "example": "User"
+            "example": "User name"
           },
           "gender": {
             "type": "string",
             "enum": ["male", "female"],
             "description": "User gender",
             "example": "female"
-          }
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar link",
+            "example": "http://res.cloudinary.com/.."
+          },
+          "dailyNorm": {
+            "type": "number",
+            "description": "User water daily normal",
+            "example": 9000
+          }         
         },
         "example": {
           "name": "Olga",
           "email": "olga@gmail.com",
-          "gender": "female"
+          "gender": "female",
+          "dailyNorm": 9000,
+          "avatarURL": "http://res.cloudinary.com/.."
         }
       },
       "WaterRate": {
