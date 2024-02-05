@@ -235,14 +235,10 @@ const forgotPassword = async (req, res) => {
 
     const resetUrl = `${FORGOT_URL}WaterTracker/updatepassword?token=${verificationToken}`;
 
-    // const resetUrl = `${req.protocol}://${req.get(
-    //   "host"
-    // )}/api/user/reset-password/${verificationToken}`;
-
     const emailData = {
       to: user.email,
       subject: "Password Reset Instruction",
-      template: "verification",
+      template: "reset",
       url: `${resetUrl}`,
     };
 

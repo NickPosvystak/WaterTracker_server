@@ -1,0 +1,20 @@
+extends layout/main
+
+block content
+   tr
+    td.wrapper
+        p Hello from team WaterTracker #{name} 
+        p
+            |  Here your have a link to restore your password and after clicking on a button you can create new password.
+        table.btn.btn-primary(role='presentation' border='0' cellpadding='0' cellspacing='0')
+            tbody
+                tr
+                    td(align='center')
+                        table(role='presentation' border='0' cellpadding='0' cellspacing='0')
+                            tbody
+                                tr
+                                    td
+                                        a(href=url target='_blank') Reset password link
+        p
+            | We hope you will be satisfied with our service and now control your water balance with ease.
+    p Good luck!
