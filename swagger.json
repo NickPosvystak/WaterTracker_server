@@ -28,7 +28,7 @@
   ],
 
   "paths": {
-    "/auth/google": {
+    "/user/google": {
       "get": {
         "tags": ["Auth"],
         "summary": "User registration from Google",
@@ -42,7 +42,7 @@
         }
       }
     },
-    "/auth/google-redirect": {
+    "/user/google-redirect": {
       "get": {
         "tags": ["Auth"],
         "summary": "User registration from Google Api redirect route",
@@ -150,9 +150,9 @@
         }
       }
     },
-    "/auth/forgot-password": {
+    "/user/forgot-password": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["User"],
         "summary": "Sending an email to a user with a new password",
         "parameters": [],
         "requestBody": {
@@ -186,7 +186,7 @@
         }
       }
     },
-    "/auth/restore-password/{verificationToken}": {
+    "/user/restore-password/{verificationToken}": {
       "post": {
         "tags": ["Auth"],
         "summary": "Restoring user password with verification token",
