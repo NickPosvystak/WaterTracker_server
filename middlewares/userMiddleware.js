@@ -65,8 +65,7 @@ const updateUserPassword = async (req, res, next) => {
         name: updatedUser.name,
         gender: updatedUser.gender,
         dailyNorm: user.dailyNorm,
-        avatar: user.avatarURL,
-        // password: newPassword ? newPassword : "Password was not updated",
+        avatarURL: user.avatarURL,
       },
     };
 
