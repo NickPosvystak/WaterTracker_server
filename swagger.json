@@ -629,7 +629,7 @@
             "description": "User daily rate",
             "example": 9000
           },
-          "avatar": {
+          "avatarURL": {
             "type": "string",
             "description": "User avatar link",
             "example": "www.gravatar.com/avatar/.."
@@ -641,7 +641,7 @@
           "email": "olga@test.com",
           "gender": "female",
           "dailyNorm": 9000,
-          "avatar": "www.gravatar.com/avatar/.."
+          "avatarURL": "www.gravatar.com/avatar/.."
         }
       },
       "NewPasswordResponse": {
@@ -687,7 +687,7 @@
             "description": "User gender",
             "example": "male"
           },
-          "avatar": {
+          "avatarURL": {
             "type": "string",
             "description": "User avatar link",
             "example": "http://res.cloudinary.com/.."
@@ -707,8 +707,8 @@
           "name": "Bogdan",
           "email": "bogdan@gmail.com",
           "gender": "male",
-          "dailyNorma": 9000,
-          "avatar": "http://res.cloudinary.com/..",
+          "dailyNorm": 9000,
+          "avatarURL": "http://res.cloudinary.com/..",
           "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
         }
       },
