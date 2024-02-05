@@ -72,9 +72,8 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-  res.status(200).json({
-    message: "Verification successful",
-  });
+  // Redirect to the login page after successful verification
+  res.redirect("https://imiryna.github.io/WaterTracker/signin");
 };
 
 const resendVerifyEmail = async (req, res) => {
