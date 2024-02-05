@@ -46,11 +46,6 @@ const register = async (req, res) => {
     { new: true, upsert: true }
   );
 
-  //TODO WARN поки відміна через довге завантаження
-  // Send email notification
-  // const verifyLink = `${BASE_URL}/api/user/verify/${verificationToken}`;
-  // await new Email(newUser, verifyLink).sendVerification();
-
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -72,11 +67,6 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-  // res.json({
-  //   message: "Verification send success"
-  // })
-
-  // Redirect to the login page after successful verification
   res.redirect("https://imiryna.github.io/WaterTracker/signin");
 };
 
@@ -107,10 +97,6 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(404, "Email or password is wrong");
   }
-  //TODO: removed specifically for testing. Switch on with SendGrid router it READY :)
-  // if (!user.verify) {
-  //   throw HttpError(401, "Email not verified");
-  // }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -151,7 +137,7 @@ const getCurrent = async (req, res) => {
     dailyNorm: user.dailyNorm,
     avatarUrl: user.avatarURL,
     created: user.createdAt,
-    updated: user.updatedAt,    
+    updated: user.updatedAt,
   });
 };
 
@@ -164,29 +150,6 @@ const logout = async (req, res) => {
   });
 };
 
-// const updateAvatar = async (req, res) => {
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   const filename = `${_id}_${originalname}`;
-//   const resultUpload = path.join(avatarsDir, filename);
-
-//   try {
-//     const image = await Jimp.read(tempUpload);
-//     await image.resize(250, 250).write(resultUpload);
-//   } catch (error) {
-//     console.error("Error processing avatar:", error);
-//     throw HttpError(500, "Internal Server Error");
-//   }
-
-//   await fs.rename(tempUpload, resultUpload);
-//   const avatarURL = path.join("avatars", filename);
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.json({
-//     avatarURL,
-//   });
-// };
-
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const avatarURL = req.file.path;
@@ -196,61 +159,6 @@ const updateAvatar = async (req, res) => {
     avatarURL,
   });
 };
-
-// const updateEmail = async (req, res) => {
-//   const { email } = req.body;
-//   const { _id } = req.user;
-//   const user = await User.findByIdAndUpdate(_id, { email });
-//   if (!user) {
-//     throw HttpError(404, "User not found");
-//   }
-
-//   res.status(200).json({
-//     message: "Email updated successfully",
-//     user: {
-//       email: user.email,
-//     },
-//   });
-// };
-
-// const updateName = async (req, res) => {
-//   const { name } = req.body;
-//   const { _id } = req.user;
-//   const user = await User.findByIdAndUpdate(_id, { name }, { new: true });
-
-//   if (!user) {
-//     throw HttpError(404, "User not found");
-//   }
-
-//   res.status(200).json({
-//     message: "Name updated successfully",
-//     user: {
-//       name: user.name,
-//     },
-//   });
-// };
-
-// const updatePassword = async (req, res) => {
-//   const { password } = req.body;
-//   const { _id } = req.user;
-//   const hashPassword = await bcrypt.hash(password, 10);
-//   const user = await User.findByIdAndUpdate(
-//     _id,
-//     { password: hashPassword },
-//     { new: true }
-//   );
-
-//   if (!user) {
-//     throw HttpError(404, "User not found");
-//   }
-
-//   res.status(200).json({
-//     message: "Password updated successfully",
-//     user: {
-//       password: password,
-//     },
-//   });
-// };
 
 const updateUser = async (req, res) => {
   const { email, name, password, gender } = req.body;
@@ -325,28 +233,21 @@ const forgotPassword = async (req, res) => {
     user.passwordResetTokenExp = Date.now() + 3600000;
     await user.save();
 
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/user/reset-password/${verificationToken}`;
+    const resetUrl = `http://localhost:3000/WaterTracker/updatepassword?token=${verificationToken}`;
 
-    // const emailData = {
-    //   to: user.email,
-    //   subject: "Password Reset Instruction",
-    //   html: `<p>Please click the following link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p>`,
-    // };
+    // const resetUrl = `${req.protocol}://${req.get(
+    //   "host"
+    // )}/api/user/reset-password/${verificationToken}`;
 
-    // await sendEmailSengrid(emailData);
-
-    
- const emailData = {
-   to: user.email,
-   subject: "Password Reset Instruction",
-   template: "verification",
-   url: `${resetUrl}`,
- };
+    const emailData = {
+      to: user.email,
+      subject: "Password Reset Instruction",
+      template: "verification",
+      url: `${resetUrl}`,
+    };
 
     await sendEmailSengrid(emailData);
-    
+
     res.status(200).json({
       msg: "Password reset instruction sent by email",
     });
@@ -361,11 +262,7 @@ const restorePassword = async (req, res) => {
     const { verificationToken } = req.params;
     const { password } = req.body;
 
-    console.log("Received verification token:", verificationToken); // Добавляем для отладки
-
     const user = await User.findOne({ verificationToken });
-
-    console.log("Found user:", user); // Добавляем для отладки
 
     if (!user || !user.passwordResetToken) {
       throw HttpError(400, "Token is not valid");
@@ -418,7 +315,7 @@ const registerSengrid = async (req, res) => {
   const verifyLink = {
     to: email,
     subject: "Verification mail",
-    template: "verification", 
+    template: "verification",
     url: `${BASE_URL}/api/user/verify/${verificationToken}`,
   };
 
@@ -439,18 +336,17 @@ const updateWaterRate = async (req, res) => {
   res.status(200).json({ dailyNorm: newUser.dailyNorm });
 };
 
-const googleAuth = async(req, res)=> {
-  const {_id: id} = req.user;
+const googleAuth = async (req, res) => {
+  const { _id: id } = req.user;
 
   const payload = {
-      id,
-  }
+    id,
+  };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: jwtExpires });
-  await User.findByIdAndUpdate(id, {token});
+  await User.findByIdAndUpdate(id, { token });
 
-  res.redirect(`${FRONTEND_URL}?Token=${token}`)
-}
-
+  res.redirect(`${FRONTEND_URL}?Token=${token}`);
+};
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -462,9 +358,6 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   updateMyPassword: ctrlWrapper(updateMyPassword),
-  // updateEmail: ctrlWrapper(updateEmail),
-  // updateName: ctrlWrapper(updateName),
-  // updatePassword: ctrlWrapper(updatePassword),
   updateUser: ctrlWrapper(updateUser),
   updateWaterRate: ctrlWrapper(updateWaterRate),
   googleAuth: ctrlWrapper(googleAuth),
