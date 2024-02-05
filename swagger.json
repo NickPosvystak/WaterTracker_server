@@ -629,10 +629,20 @@
             "description": "User daily rate",
             "example": 9000
           },
-          "avatarURL": {
+          "avatarUrl": {
             "type": "string",
             "description": "User avatar link",
             "example": "www.gravatar.com/avatar/.."
+          },
+          "created": {
+            "type": "string",
+            "description": "User created date",
+            "example": "2024-02-04T19:25:05.800Z"
+          },
+          "updated": {
+            "type": "string",
+            "description": "User updated date",
+            "example": "2024-02-05T11:44:45.455Z"
           }
         },
         "example": {
@@ -641,7 +651,9 @@
           "email": "olga@test.com",
           "gender": "female",
           "dailyNorm": 9000,
-          "avatarURL": "www.gravatar.com/avatar/.."
+          "avatarUrl": "www.gravatar.com/avatar/..",
+          "created": "2024-02-04T19:25:05.800Z",
+          "updated": "2024-02-05T11:44:45.455Z"
         }
       },
       "NewPasswordResponse": {
@@ -687,7 +699,7 @@
             "description": "User gender",
             "example": "male"
           },
-          "avatarURL": {
+          "avatarUrl": {
             "type": "string",
             "description": "User avatar link",
             "example": "http://res.cloudinary.com/.."
@@ -701,6 +713,16 @@
             "type": "string",
             "description": "User token",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
+          },
+          "created": {
+            "type": "string",
+            "description": "User created date",
+            "example": "2024-02-04T19:25:05.800Z"
+          },
+          "updated": {
+            "type": "string",
+            "description": "User updated date",
+            "example": "2024-02-05T11:44:45.455Z"
           }
         },
         "example": {
@@ -709,7 +731,9 @@
           "gender": "male",
           "dailyNorm": 9000,
           "avatarURL": "http://res.cloudinary.com/..",
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY3ODVmYjIxOThlNzQxOGIxNmIzMiIsImlhdCI6MTcwNjUxODc5MCwiZXhwIjoxNzA2NjA1MTkwfQ.5xR_zFNtlD8oGGhxDUYlJqW1TZDklkpGIS0mT9Bba7c",
+          "created": "2024-02-04T19:25:05.800Z",
+          "updated": "2024-02-05T11:44:45.455Z"
         }
       },
       "AvatarResponse": {
@@ -792,14 +816,26 @@
             "type": "number",
             "description": "User water daily normal",
             "example": 9000
-          }         
+          },
+          "created": {
+            "type": "string",
+            "description": "User created date",
+            "example": "2024-02-04T19:25:05.800Z"
+          },
+          "updated": {
+            "type": "string",
+            "description": "User updated date",
+            "example": "2024-02-05T11:44:45.455Z"
+          }
         },
         "example": {
           "name": "Olga",
           "email": "olga@gmail.com",
           "gender": "female",
           "dailyNorm": 9000,
-          "avatarURL": "http://res.cloudinary.com/.."
+          "avatarURL": "http://res.cloudinary.com/..",
+          "created": "2024-02-04T19:25:05.800Z",
+          "updated": "2024-02-05T11:44:45.455Z"
         }
       },
       "WaterRate": {

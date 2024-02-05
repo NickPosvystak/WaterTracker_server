@@ -65,7 +65,9 @@ const updateUserPassword = async (req, res, next) => {
         name: updatedUser.name,
         gender: updatedUser.gender,
         dailyNorm: user.dailyNorm,
-        avatarURL: user.avatarURL,
+        avatarUrl: user.avatarURL,
+        created: user.createdAt,
+        updated: updatedUser.updatedAt,
       },
     };
 
