@@ -72,6 +72,10 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
+  // res.json({
+  //   message: "Verification send success"
+  // })
+
   // Redirect to the login page after successful verification
   res.redirect("https://imiryna.github.io/WaterTracker/signin");
 };
@@ -103,7 +107,7 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(404, "Email or password is wrong");
   }
-  //TODO: removed specifically for testing
+  //TODO: removed specifically for testing. Switch on with SendGrid router it READY :)
   // if (!user.verify) {
   //   throw HttpError(401, "Email not verified");
   // }
@@ -403,8 +407,9 @@ const registerSengrid = async (req, res) => {
 
   const verifyLink = {
     to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/user/verify/${verificationToken}">Click verify email</a>`,
+    subject: "Verification mail",
+    template: "verification", 
+    url: `${BASE_URL}/api/user/verify/${verificationToken}`,
   };
 
   await sendEmailSengrid(verifyLink);
