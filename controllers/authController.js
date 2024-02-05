@@ -18,7 +18,7 @@ const {
 } = require("../helpers");
 const Email = require("../helpers/sendEmail");
 
-const { JWT_SECRET, BASE_URL, FRONTEND_URL } = process.env;
+const { JWT_SECRET, BASE_URL, FRONTEND_URL, FORGOT_URL } = process.env;
 const jwtExpires = "1d";
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
@@ -233,16 +233,12 @@ const forgotPassword = async (req, res) => {
     user.passwordResetTokenExp = Date.now() + 3600000;
     await user.save();
 
-    const resetUrl = `http://localhost:3000/WaterTracker/updatepassword?token=${verificationToken}`;
-
-    // const resetUrl = `${req.protocol}://${req.get(
-    //   "host"
-    // )}/api/user/reset-password/${verificationToken}`;
+    const resetUrl = `${FORGOT_URL}WaterTracker/updatepassword?token=${verificationToken}`;
 
     const emailData = {
       to: user.email,
       subject: "Password Reset Instruction",
-      template: "verification",
+      template: "reset",
       url: `${resetUrl}`,
     };
 
