@@ -12,11 +12,6 @@ const {
 
 const { schemas } = require("../models/userModel");
 const { userUpdateSchema } = require("../helpers");
-// const {
-//   updateEmailSchema,
-//   updateNameSchema,
-//   updatePasswordSchema,
-// } = require("../helpers");
 
 const authRouter = express.Router();
 
@@ -44,7 +39,6 @@ authRouter.post(
 );
 
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
-// authRouter.post("/verify", ctrl.resendVerifyEmail);
 
 authRouter.post(
   "/verify",
@@ -72,34 +66,6 @@ authRouter.patch(
   ctrl.updateWaterRate
 );
 
-// authRouter.patch(
-//   "/email",
-//   authentificate,
-//   validateBody(updateEmailSchema),
-//   ctrl.updateEmail
-// );
-
-// authRouter.patch(
-//   "/name",
-//   authentificate,
-//   validateBody(updateNameSchema),
-//   ctrl.updateName
-// );
-
-// authRouter.patch(
-//   "/password",
-//   authentificate,
-//   validateBody(updatePasswordSchema),
-//   ctrl.updatePassword
-// );
-
-// authRouter.patch(
-//   "/updateUser",
-//   authentificate,
-//   validateBody(userUpdateSchema),
-//   ctrl.updateUser
-// );
-
 authRouter.patch(
   "/updateUser",
   authentificate,
@@ -107,7 +73,11 @@ authRouter.patch(
   ctrl.updateMyPassword
 );
 
-authRouter.post("/forgot-password", ctrl.forgotPassword);
+authRouter.post(
+  "/forgot-password",
+  validateBody(schemas.emailSchema),
+  ctrl.forgotPassword
+);
 
 authRouter.post("/restore-password/:verificationToken", ctrl.restorePassword);
 
