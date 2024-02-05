@@ -128,7 +128,9 @@ const login = async (req, res) => {
     email: user.email,
     gender: user.gender,
     dailyNorm: user.dailyNorm,
-    avatarURL: user.avatarURL,
+    avatarUrl: user.avatarURL,
+    created: user.createdAt,
+    updated: user.updatedAt,
   });
 };
 
@@ -144,7 +146,7 @@ const getCurrent = async (req, res) => {
     token: user.token,
     gender: user.gender,
     dailyNorm: user.dailyNorm,
-    avatarURL: user.avatarURL,
+    avatarUrl: user.avatarURL,
     created: user.createdAt,
     updated: user.updatedAt,    
   });
