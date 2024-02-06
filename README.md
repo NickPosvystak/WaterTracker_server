@@ -40,30 +40,6 @@ To deploy this project run
 [Swagger: API Documentation](https://water-tracker-backend-314i.onrender.com/api/docs/)
 
 
-## FAQ
-
-#### Question 1
-
-Answer 1
-
-#### Question 2
-
-Answer 2
-
-
-## Features
-
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
-
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
-
 ## Tech Stack
 
 
@@ -85,6 +61,5 @@ Answer 2
 - [NickPosvystak](https://github.com/NickPosvystak)
 - [Nikolaihait4](https://github.com/Nikolaihait4)
 - [katesyvash795](https://github.com/katesyvash795)
-
 
 
