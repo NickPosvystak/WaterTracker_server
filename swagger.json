@@ -654,7 +654,7 @@
           "dailyNorm": {
             "type": "number",
             "description": "User daily rate",
-            "example": 9000
+            "example": 1800
           },
           "avatarUrl": {
             "type": "string",
@@ -677,7 +677,7 @@
           "name": "Olga",
           "email": "olga@test.com",
           "gender": "female",
-          "dailyNorm": 9000,
+          "dailyNorm": 1800,
           "avatarUrl": "www.gravatar.com/avatar/..",
           "created": "2024-02-04T19:25:05.800Z",
           "updated": "2024-02-05T11:44:45.455Z"
