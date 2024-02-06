@@ -1,6 +1,6 @@
 # Water Tracker App
 
-This this project is backend APP for Water Tracker App, and currently deployed on Render.com.
+This project is backend APP for `#0969DA` Water Tracker App, and currently deployed on Render.com.
 
 To get more details you can visit documentation [Swagger](https://water-tracker-backend-314i.onrender.com/api/docs/)
 Technologies
