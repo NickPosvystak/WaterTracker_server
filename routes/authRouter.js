@@ -26,12 +26,6 @@ authRouter.get(
   ctrl.googleAuth
 );
 
-// authRouter.post(
-//   "/register",
-//   validateBody(schemas.userRegisterSchema),
-//   ctrl.register
-// );
-
 authRouter.post(
   "/register",
   validateBody(schemas.userRegisterSchema),
@@ -39,12 +33,6 @@ authRouter.post(
 );
 
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
-
-authRouter.post(
-  "/verify",
-  validateBody(schemas.emailSchema),
-  ctrl.resendVerifyEmail
-);
 
 authRouter.post("/login", validateBody(schemas.userLoginSchema), ctrl.login);
 

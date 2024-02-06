@@ -64,40 +64,34 @@ const registerSendGrid = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const { verificationToken } = req.params;
+  try {
+    const { verificationToken } = req.params;
 
-  const user = await User.findOne({ verificationToken });
+    if (!verificationToken) {
+      throw HttpError(400, "Bad request - Invalid verification token");
+    }
 
-  if (!user) {
-    throw HttpError(404, "User not found");
+    const user = await User.findOne({ verificationToken });
+
+    if (!user) {
+      throw HttpError(404, "User not found");
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+res.status(200).json({ message: "verification successful" });
+    // Redirect the user to the sign-in page after successful verification
+    // res.redirect("https://imiryna.github.io/WaterTracker/signin");
+  } catch (error) {
+    console.error("Error verifying email:", error);
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   }
-  
-  await User.findByIdAndUpdate(user._id, {
-    verify: true,
-    verificationToken: null,
-  });
-
-  res.redirect("https://imiryna.github.io/WaterTracker/signin");
-};
-
-const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
-
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw HttpError(401, "Email not found");
-  }
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  // Resend email verification link
-  const resendLink = `${BASE_URL}/api/user/verify/${user.verificationToken}`;
-  await new Email(user, resendLink).sendVerification();
-
-  res.status(200).json({
-    message: "Verification email sent",
-  });
 };
 
 const login = async (req, res) => {
@@ -373,10 +367,9 @@ const googleAuth = async (req, res) => {
 };
 
 module.exports = {
-  register: ctrlWrapper(register),
   registerSendGrid: ctrlWrapper(registerSendGrid),
   verifyEmail: ctrlWrapper(verifyEmail),
-  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  // resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
