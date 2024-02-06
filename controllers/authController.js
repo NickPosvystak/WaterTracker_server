@@ -201,12 +201,10 @@ const updateUser = async (req, res) => {
 const updateMyPassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, email, name, gender } = req.body;
-    const { _id } = req.user;
+    const { _id, email: userEmail, password } = req.user;
 
-    const user = await User.findById(_id);
-
-    if (newPassword || email || name || gender) {
-      const isMatch = await user.checkPassword(currentPassword, user.password);
+    if (password || email || name || gender) {
+      const isMatch = await bcrypt.compare(currentPassword, password);
       if (!isMatch) {
         return res
           .status(400)
@@ -216,7 +214,11 @@ const updateMyPassword = async (req, res) => {
 
     const updateFields = {};
 
-    if (email) {
+    if (email && email !== userEmail) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser && existingUser._id.toString() !== _id) {
+        return res.status(400).json({ message: "Email is already in use" });
+      }
       updateFields.email = email;
     }
     if (name) {
@@ -226,10 +228,9 @@ const updateMyPassword = async (req, res) => {
       updateFields.gender = gender;
     }
 
-    t;
     let hashedPassword;
     if (newPassword) {
-      hashedPassword = await hashPassword(newPassword);
+      hashedPassword = await bcrypt.hash(newPassword, 10);
       updateFields.password = hashedPassword;
     }
 
@@ -243,9 +244,9 @@ const updateMyPassword = async (req, res) => {
         email: updatedUser.email,
         name: updatedUser.name,
         gender: updatedUser.gender,
-        dailyNorm: user.dailyNorm,
-        avatarUrl: user.avatarURL,
-        created: user.createdAt,
+        dailyNorm: updatedUser.dailyNorm,
+        avatarUrl: updatedUser.avatarURL,
+        created: updatedUser.createdAt,
         updated: updatedUser.updatedAt,
       },
     };
