@@ -79,6 +79,6 @@ authRouter.post(
   ctrl.forgotPassword
 );
 
-authRouter.post("/restore-password/:verificationToken", ctrl.restorePassword);
+authRouter.patch("/restore-password/:verificationToken", ctrl.restorePassword);
 
 module.exports = authRouter;
