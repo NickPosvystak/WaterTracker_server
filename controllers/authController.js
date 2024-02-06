@@ -226,7 +226,7 @@ const updateMyPassword = async (req, res) => {
       updateFields.gender = gender;
     }
 
-    t;
+    
     let hashedPassword;
     if (newPassword) {
       hashedPassword = await hashPassword(newPassword);
