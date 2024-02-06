@@ -201,10 +201,12 @@ const updateUser = async (req, res) => {
 const updateMyPassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, email, name, gender } = req.body;
+
     const { _id, email: userEmail, password } = req.user;
 
     if (password || email || name || gender) {
       const isMatch = await bcrypt.compare(currentPassword, password);
+
       if (!isMatch) {
         return res
           .status(400)
