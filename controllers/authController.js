@@ -201,12 +201,12 @@ const updateUser = async (req, res) => {
 const updateMyPassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, email, name, gender } = req.body;
-    const { _id } = req.user;
+    const { _id, password } = req.user;
 
     const user = await User.findById(_id);
 
     if (newPassword || email || name || gender) {
-      const isMatch = await user.checkPassword(currentPassword, user.password);
+      const isMatch = await user.checkPassword(currentPassword, password);
       if (!isMatch) {
         return res
           .status(400)
@@ -226,7 +226,6 @@ const updateMyPassword = async (req, res) => {
       updateFields.gender = gender;
     }
 
-    
     let hashedPassword;
     if (newPassword) {
       hashedPassword = await hashPassword(newPassword);
