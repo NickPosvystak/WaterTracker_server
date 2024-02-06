@@ -100,17 +100,12 @@ const updateWaterRate = Joi.object({
   }),
 });
 
-userSchema.methods.checkPassword = async function (
-  candidatePassword,
-  hashedPassword
-) {
-  if (!candidatePassword || !hashedPassword) {
+userSchema.methods.checkPassword = async function (candidatePassword) {
+  if (!candidatePassword) {
     return false;
   }
-  return await bcrypt.compare(candidatePassword, hashedPassword);
+  return await bcrypt.compare(candidatePassword, this.password);
 };
-
-
 
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
