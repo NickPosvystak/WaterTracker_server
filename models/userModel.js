@@ -39,7 +39,7 @@ const userSchema = new Schema(
     },
     dailyNorm: {
       type: Number,
-      default: null,
+      default: 1800,
     },
     avatarURL: {
       type: String,
