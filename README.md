@@ -6,9 +6,9 @@
 
 
 
-- This project is backend APP for Water Tracker App
+- This project is backend APP for [Water Tracker App](https://imiryna.github.io/WaterTracker/)
 
-- Currently deployed on Render.com.
+- Currently deployed on [Render.com](https://render.com/).
 
 
 ## BASE_URL
