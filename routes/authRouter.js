@@ -26,16 +26,16 @@ authRouter.get(
   ctrl.googleAuth
 );
 
+// authRouter.post(
+//   "/register",
+//   validateBody(schemas.userRegisterSchema),
+//   ctrl.register
+// );
+
 authRouter.post(
   "/register",
   validateBody(schemas.userRegisterSchema),
-  ctrl.register
-);
-
-authRouter.post(
-  "/registerSeng",
-  validateBody(schemas.userRegisterSchema),
-  ctrl.registerSengrid
+  ctrl.registerSendGrid
 );
 
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);

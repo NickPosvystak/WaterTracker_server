@@ -23,7 +23,7 @@ const jwtExpires = "1d";
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
-const register = async (req, res) => {
+const registerSendGrid = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -32,6 +32,7 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  // const avatarURL = gravatar.url(email);
   const avatarURL = gravatar.url(email, { default: "wavatar" });
   const verificationToken = uuidv4();
 
@@ -45,6 +46,15 @@ const register = async (req, res) => {
     },
     { new: true, upsert: true }
   );
+
+  const verifyLink = {
+    to: email,
+    subject: "Verification mail",
+    template: "verification",
+    url: `${BASE_URL}/api/user/verify/${verificationToken}`,
+  };
+
+  await sendEmailSengrid(verifyLink);
 
   res.status(201).json({
     user: {
@@ -61,7 +71,7 @@ const verifyEmail = async (req, res) => {
   if (!user) {
     throw HttpError(404, "User not found");
   }
-
+  
   await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: null,
@@ -97,6 +107,9 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(404, "Email or password is wrong");
   }
+    if (!user.verify) {
+      throw HttpError(400, "Email verification is required");
+    }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -338,42 +351,6 @@ const restorePassword = async (req, res) => {
   }
 };
 
-const registerSengrid = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-
-  if (user) {
-    throw HttpError(409, "Email already in use");
-  }
-
-  const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
-  const verificationToken = uuidv4();
-
-  const newUser = await User.create({
-    ...req.body,
-    password: hashPassword,
-    avatarURL,
-    verificationToken,
-  });
-
-  await newUser.save();
-
-  const verifyLink = {
-    to: email,
-    subject: "Verification mail",
-    template: "verification",
-    url: `${BASE_URL}/api/user/verify/${verificationToken}`,
-  };
-
-  await sendEmailSengrid(verifyLink);
-
-  res.status(201).json({
-    user: {
-      email: newUser.email,
-    },
-  });
-};
 
 const updateWaterRate = async (req, res) => {
   const { _id } = req.user;
@@ -397,7 +374,7 @@ const googleAuth = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
-  registerSengrid: ctrlWrapper(registerSengrid),
+  registerSendGrid: ctrlWrapper(registerSendGrid),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
