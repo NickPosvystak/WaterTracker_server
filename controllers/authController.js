@@ -199,13 +199,62 @@ const updateUser = async (req, res) => {
 };
 
 const updateMyPassword = async (req, res) => {
-  const { newPassword } = req.body;
+  try {
+    const { currentPassword, newPassword, email, name, gender } = req.body;
+    const { _id } = req.user;
 
-  const hashedPassword = await hashPassword(newPassword);
-  req.user.password = hashedPassword;
-  await req.user.save();
+    const user = await User.findById(_id);
 
-  res.status(200).json({ message: "Password updated successfully" });
+    if (newPassword || email || name || gender) {
+      const isMatch = await user.checkPassword(currentPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect" });
+      }
+    }
+
+    const updateFields = {};
+
+    if (email) {
+      updateFields.email = email;
+    }
+    if (name) {
+      updateFields.name = name;
+    }
+    if (gender) {
+      updateFields.gender = gender;
+    }
+
+    t;
+    let hashedPassword;
+    if (newPassword) {
+      hashedPassword = await hashPassword(newPassword);
+      updateFields.password = hashedPassword;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(_id, updateFields, {
+      new: true,
+    });
+
+    const response = {
+      message: "User updated successfully",
+      user: {
+        email: updatedUser.email,
+        name: updatedUser.name,
+        gender: updatedUser.gender,
+        dailyNorm: user.dailyNorm,
+        avatarUrl: user.avatarURL,
+        created: user.createdAt,
+        updated: updatedUser.updatedAt,
+      },
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update user" });
+  }
 };
 
 const forgotPassword = async (req, res) => {
