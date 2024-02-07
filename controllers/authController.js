@@ -291,7 +291,7 @@ const forgotPassword = async (req, res) => {
     user.passwordResetTokenExp = Date.now() + 3600000;
     await user.save();
 
-    const resetUrl = `https://water-tracker-backend-314i.onrender.com/api/user/restore-password/?token=${verificationToken}`;
+    const resetUrl = `http://localhost:3000/WaterTracker/updatepassword?token=${verificationToken}`;
 
     const emailData = {
       to: user.email,
