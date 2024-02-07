@@ -284,7 +284,6 @@ const forgotPassword = async (req, res) => {
     user.verificationToken = verificationToken;
     await user.save();
 
-    console.log(verificationToken);
 
     const tempPasswordResetToken = crypto.randomBytes(32).toString("hex");
     user.passwordResetToken = tempPasswordResetToken;
@@ -292,8 +291,7 @@ const forgotPassword = async (req, res) => {
     await user.save();
 
     const resetUrl = `https://imiryna.github.io/WaterTracker/updatepassword?token=${verificationToken}`;
-    console.log('FRONTEND_URL: ', FRONTEND_URL);
-
+ 
     const emailData = {
       to: user.email,
       subject: "Password Reset Instruction",
