@@ -51,7 +51,7 @@ const registerSendGrid = async (req, res) => {
     to: email,
     subject: "Verification mail",
     template: "verification",
-    url: `https://imiryna.github.io/WaterTracker/users/verify/${verificationToken}`,
+    url: `https://imiryna.github.io/WaterTracker/verify/${verificationToken}`,
   };
 
   await sendEmailSengrid(verifyLink);
