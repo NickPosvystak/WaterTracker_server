@@ -81,9 +81,9 @@ const verifyEmail = async (req, res) => {
       verify: true,
       verificationToken: null,
     });
-res.status(200).json({ message: "verification successful" });
+// res.status(200).json({ message: "verification successful" });
     // Redirect the user to the sign-in page after successful verification
-    // res.redirect("https://imiryna.github.io/WaterTracker/signin");
+    res.redirect("https://imiryna.github.io/WaterTracker/signin");
   } catch (error) {
     console.error("Error verifying email:", error);
     if (error.statusCode) {
