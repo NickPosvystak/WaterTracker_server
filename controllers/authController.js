@@ -291,7 +291,8 @@ const forgotPassword = async (req, res) => {
     user.passwordResetTokenExp = Date.now() + 3600000;
     await user.save();
 
-    const resetUrl = `${FRONTEND_URL}/updatepassword?token=${verificationToken}`;
+    const resetUrl = `https://imiryna.github.io/WaterTracker/updatepassword?token=${verificationToken}`;
+    console.log('FRONTEND_URL: ', FRONTEND_URL);
 
     const emailData = {
       to: user.email,
