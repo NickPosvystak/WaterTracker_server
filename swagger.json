@@ -66,48 +66,6 @@
         }
       }
     },
-    "/user/verify/{verificationToken}": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Verify user's email",
-        "parameters": [
-          {
-            "name": "verificationToken",
-            "in": "path",
-            "description": "The verification token sent to the user's email.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {}
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Verification successful",
-            "content": {}
-          },
-
-          "400": {
-            "description": "Bad request - Invalid verification token",
-            "content": {}
-          },
-          "404": {
-            "description": "User not found",
-            "content": {}
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {}
-          }
-        }
-      }
-    },
     "/user/login": {
       "post": {
         "tags": ["Auth"],
