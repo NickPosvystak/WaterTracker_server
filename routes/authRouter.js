@@ -29,22 +29,10 @@ authRouter.get(
 authRouter.post(
   "/register",
   validateBody(schemas.userRegisterSchema),
-  ctrl.register
-);
-
-authRouter.post(
-  "/registerSeng",
-  validateBody(schemas.userRegisterSchema),
-  ctrl.registerSengrid
+  ctrl.registerSendGrid
 );
 
 authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
-
-authRouter.post(
-  "/verify",
-  validateBody(schemas.emailSchema),
-  ctrl.resendVerifyEmail
-);
 
 authRouter.post("/login", validateBody(schemas.userLoginSchema), ctrl.login);
 
