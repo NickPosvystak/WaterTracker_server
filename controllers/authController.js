@@ -51,7 +51,7 @@ const registerSendGrid = async (req, res) => {
     to: email,
     subject: "Verification mail",
     template: "verification",
-    url: `${BASE_URL}/api/user/verify/${verificationToken}`,
+    url: `https://imiryna.github.io/WaterTracker/api/user/verify/${verificationToken}`,
   };
 
   await sendEmailSengrid(verifyLink);
@@ -81,7 +81,7 @@ const verifyEmail = async (req, res) => {
       verify: true,
       verificationToken: null,
     });
-// res.status(200).json({ message: "verification successful" });
+    // res.status(200).json({ message: "verification successful" });
     // Redirect the user to the sign-in page after successful verification
     res.redirect("https://imiryna.github.io/WaterTracker/signin");
   } catch (error) {
@@ -101,9 +101,9 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(404, "Email or password is wrong");
   }
-    // if (!user.verify) {
-    //   throw HttpError(400, "Email verification is required");
-    // }
+  // if (!user.verify) {
+  //   throw HttpError(400, "Email verification is required");
+  // }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -284,14 +284,13 @@ const forgotPassword = async (req, res) => {
     user.verificationToken = verificationToken;
     await user.save();
 
-
     const tempPasswordResetToken = crypto.randomBytes(32).toString("hex");
     user.passwordResetToken = tempPasswordResetToken;
     user.passwordResetTokenExp = Date.now() + 3600000;
     await user.save();
 
     const resetUrl = `https://imiryna.github.io/WaterTracker/updatepassword?token=${verificationToken}`;
- 
+
     const emailData = {
       to: user.email,
       subject: "Password Reset Instruction",
@@ -343,7 +342,6 @@ const restorePassword = async (req, res) => {
     });
   }
 };
-
 
 const updateWaterRate = async (req, res) => {
   const { _id } = req.user;
