@@ -51,7 +51,7 @@ const registerSendGrid = async (req, res) => {
     to: email,
     subject: "Verification mail",
     template: "verification",
-    url: `https://water-tracker-backend-314i.onrender.com/api/auth/verify/${verificationToken}`,
+    url: `https://water-tracker-backend-314i.onrender.com/api/user/verify/${verificationToken}`,
   };
 
   await sendEmailSengrid(verifyLink);
